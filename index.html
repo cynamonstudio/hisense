@@ -124,8 +124,8 @@
 
   /* CTV: telewizor z ramką L (squeeze-back) */
   .s-ctv .podium { left:330px; top:659px; width:420px; }
-  .s-ctv .dev { left:150px; top:175px; width:780px; }
-  .tv .screen { left:1.39220366%; top:2.13299875%; width:97.05648369%; height:86.07277290%; background:#000; }
+  .s-ctv .dev { left:130px; top:140px; width:820px; }
+  .tv .screen { left:4.54%; top:6.35%; width:91.02%; height:79.26%; background:#000; }
   .ctvw { position:absolute; top:0; bottom:0; left:50%; height:100%; aspect-ratio:16/9; transform:translateX(-50%); overflow:hidden; background:#06433b; }
   .ctvw .ramka { position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; transition:opacity .8s ease; }
   .prog { position:absolute; left:0; top:0; width:100%; height:100%; overflow:hidden; z-index:2; transition:left 1s cubic-bezier(.6,0,.2,1), top 1s cubic-bezier(.6,0,.2,1), width 1s cubic-bezier(.6,0,.2,1), height 1s cubic-bezier(.6,0,.2,1);
@@ -310,7 +310,7 @@ na kolorowe święta!</h1>
           <div class="prog"><video class="progv" src="assets/video/ctv_loop.mp4" muted loop playsinline preload="auto"></video></div>
         </div>
       </div>
-      <img class="frame" src="assets/frames/tv_hisense_front.png" alt="Telewizor Hisense U8 — widok frontalny">
+      <img class="frame" src="assets/frames/tv.png" alt="">
     </div>
     <div class="copy">
       <h1>CTV</h1><div class="sub">ramka L-frame</div>
@@ -608,10 +608,18 @@ na kolorowe święta!</h1>
   d.addEventListener('fullscreenchange', syncFs); d.addEventListener('webkitfullscreenchange', syncFs);
 
   /* ---------- wstępne ładowanie ---------- */
-  var list = ['assets/frames/yt_page.png','assets/img/ctv_grafika.webp','assets/img/imax_bg.webp','assets/img/imax_pod.webp','assets/img/imax_logo.webp','assets/img/imax_txt.webp','assets/frames/tv_hisense_front.png','assets/portal/placeholder.png','assets/img/para.webp','assets/img/podium_top.webp','assets/img/s5.webp','assets/img/s4a.webp','assets/img/s4b.webp','assets/img/s4c.webp','assets/img/kulka.webp','assets/img/logo_hisense.svg','assets/frames/telefon.png','assets/frames/laptop2_clean.png','assets/portal/portal.png','assets/portal/portal_richmedia.png'];
+  var list = ['assets/frames/yt_page.png','assets/img/ctv_grafika.webp','assets/img/imax_bg.webp','assets/img/imax_pod.webp','assets/img/imax_logo.webp','assets/img/imax_txt.webp','assets/frames/tv.png','assets/portal/placeholder.png','assets/img/para.webp','assets/img/podium_top.webp','assets/img/s5.webp','assets/img/s4a.webp','assets/img/s4b.webp','assets/img/s4c.webp','assets/img/kulka.webp','assets/img/logo_hisense.svg','assets/frames/telefon.png','assets/frames/laptop2_clean.png','assets/portal/portal.png','assets/portal/portal_richmedia.png'];
   var done = 0, fill = document.getElementById('fill'), t0 = performance.now();
-  function tick() { done++; fill.style.width = Math.round(done / (list.length + 1) * 100) + '%'; }
+  function tick() { done++; fill.style.width = Math.round(done / (list.length + 3) * 100) + '%'; }
   var jobs = list.map(function (src) { return new Promise(function (res) { var im = new Image(); im.onload = im.onerror = function () { tick(); res(); }; im.src = src; }); });
+  // wideo (CTV, YouTube) ładuje się razem z prezentacją, żeby startowało od razu po wejściu na slajd
+  [].forEach.call(document.querySelectorAll('video.progv, video.ytv'), function (v) {
+    jobs.push(new Promise(function (res) {
+      var done = false; function ok() { if (!done) { done = true; tick(); res(); } }
+      v.preload = 'auto'; v.addEventListener('canplaythrough', ok, { once:true }); v.addEventListener('error', ok, { once:true });
+      setTimeout(ok, 8000); v.load();
+    }));
+  });
   jobs.push((document.fonts ? Promise.all([document.fonts.load('500 50px Poppins'), document.fonts.load('400 21px Poppins')]).catch(function () {}) : Promise.resolve()).then(tick));
   Promise.all(jobs).then(function () {
     setTimeout(function () {
