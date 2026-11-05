@@ -1,0 +1,21 @@
+Hisense U8. Official front-view PNG from https://www.hisense-usa.com/televisions
+https://www.hisense-usa.com/_media/991681_ba30fef44e0148c78553386ec677c517~mv2.png
+Original manufacturer outer alpha preserved exactly. Only active screen pixels removed; no AI redraw, no white-background extraction, no product distortion.
+{
+  "size": [
+    2514,
+    1594
+  ],
+  "screen_pixels": [
+    35,
+    34,
+    2475,
+    1406
+  ],
+  "screen_css_percent": {
+    "left": 1.3922036595067622,
+    "top": 2.132998745294856,
+    "width": 97.05648369132857,
+    "height": 86.07277289836888
+  }
+}

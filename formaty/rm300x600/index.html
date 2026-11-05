@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="ad.size" content="width=300,height=600">
+<meta name="viewport" content="width=300, initial-scale=1">
+<title>Hisense – rich media 300x600</title>
+<script>var clickTag = "https://hisense.pl/";</script>
+<style>
+@font-face{font-family:HS;src:url(fonts/hs-Regular.woff2) format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:HS;src:url(fonts/hs-Medium.woff2) format("woff2");font-weight:500;font-display:block}
+@font-face{font-family:HS;src:url(fonts/hs-Bold.woff2) format("woff2");font-weight:700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+/*PAGECSS*/html,body{width:300px;height:600px;overflow:hidden;background:#033a33}
+#ad{position:relative;width:300px;height:600px;overflow:hidden;cursor:pointer;
+  font-family:HS,Arial,sans-serif;color:#fff;-webkit-font-smoothing:antialiased;opacity:0;transition:opacity .3s}
+#ad.ready{opacity:1}
+#bg{position:absolute;left:0;top:0}
+#txt{position:absolute;left:0;top:0;width:300px;height:600px;pointer-events:none}
+.line{position:absolute;left:0;width:300px;overflow:hidden}
+.line svg{position:absolute;left:0;display:block;will-change:transform}
+/* animated wrapper (translate/opacity) + inner image placed with the exact matrix from the storyboard PDF */
+.l{position:absolute;left:0;top:0;width:0;height:0;will-change:transform,opacity;pointer-events:none}
+.m{position:absolute;left:0;top:0;transform-origin:0 0;display:block;max-width:none}
+#podia{position:absolute;inset:0}
+/* layering: devices start inside the hole (under the frame) and jump above it once they clear the star's bottom tooth */
+#bg{z-index:0}
+#ad>.l,#txt{z-index:5}
+#podia{z-index:1}
+#ad>.l.stage{z-index:1}
+#frame{z-index:2}
+#ad>.l.stage.up{z-index:3}
+#para .m{filter:drop-shadow(24px 18px 22px rgba(0,0,0,.2))}
+#rib .m{filter:drop-shadow(10px 11px 10px rgba(0,0,0,.2))}
+#tv .m,#projV .m,#projH .m{filter:drop-shadow(2px 6px 6px rgba(0,0,0,.22))}
+#txt text{font-family:HS,Arial,sans-serif;font-size:24.45px;fill:#fff}
+#txt .md{font-weight:500}
+#txt .gold{fill:url(#goldTxt)}
+#logo{left:0;top:0}
+#logo img{position:absolute;left:89.3px;top:32.8px;width:109.2px;display:block}
+#cta{position:absolute;left:50px;top:543px;width:200px;height:44px;overflow:hidden;
+  background:linear-gradient(180deg,#f1d696 0%,#e2b96c 45%,#cf9e52 100%);
+  color:#8c1a2b;font-size:17px;font-weight:700;letter-spacing:.6px;line-height:44px;text-align:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.5)}
+/* light sweep passing over the button */
+#cta::after{content:"";position:absolute;top:-20px;left:-90px;width:60px;height:84px;
+  background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 100%);
+  transform:skewX(-22deg);animation:sweep 2.6s ease-in-out infinite}
+@keyframes sweep{0%{left:-90px}45%,100%{left:250px}}
+#hint{position:absolute;left:110px;top:500px;width:80px;height:30px;border-radius:15px;background:rgba(0,0,0,.28);
+  font-size:11px;line-height:30px;text-align:center}
+.fl{position:absolute;left:0;top:0;width:0;height:0;animation:fl 3.4s ease-in-out infinite}
+#d2 .fl{animation-duration:4.1s;animation-delay:-1.2s}
+#d3 .fl{animation-duration:3.7s;animation-delay:-2.1s}
+#d4 .fl{animation-duration:4.4s;animation-delay:-.6s}
+#d5 .fl{animation-duration:3.1s;animation-delay:-1.7s}
+#d6 .fl{animation-duration:3.9s;animation-delay:-2.6s}
+@keyframes fl{0%,100%{transform:translateY(2px) rotate(-14deg) scale(.94)}50%{transform:translateY(-5px) rotate(14deg) scale(1.08)}}
+/* delicate glints: short warm glow + brightness flash, each ornament at its own moment */
+.fl img{animation:glint 2.8s ease-in-out infinite}
+#d2 .fl img{animation-duration:3.3s;animation-delay:-.4s}
+#d3 .fl img{animation-duration:2.6s;animation-delay:-1.9s}
+#d4 .fl img{animation-duration:3.6s;animation-delay:-1.1s}
+#d5 .fl img{animation-duration:2.4s;animation-delay:-.9s}
+#d6 .fl img{animation-duration:3.1s;animation-delay:-2.3s}
+@keyframes glint{0%,62%,100%{filter:brightness(1) drop-shadow(0 0 0 rgba(255,226,150,0))}
+  74%{filter:brightness(1.35) drop-shadow(0 0 5px rgba(255,226,150,.85))}
+  84%{filter:brightness(1.05) drop-shadow(0 0 2px rgba(255,226,150,.3))}}
+/* projector light effects (screen blend, gentle flicker) */
+.raysH{animation:rays 1.3s ease-in-out infinite}
+@keyframes rays{0%,100%{opacity:.85;transform:scaleY(.97)}30%{opacity:1;transform:scaleY(1.02)}55%{opacity:.8}78%{opacity:.95;transform:scaleY(1)}}
+.core{animation:flick 1.05s ease-in-out infinite}
+.core2{animation:flick .85s ease-in-out infinite}
+.halo{animation:halo 1.2s ease-in-out infinite}
+.halo.h2{animation-duration:1s;animation-delay:-.7s}
+.streak{animation:streak .95s ease-in-out infinite}
+#fxH .streak{animation-delay:-.3s;animation-duration:1.15s}
+@keyframes flick{0%,100%{opacity:.85}25%{opacity:1}45%{opacity:.78}70%{opacity:.96}}
+@keyframes halo{0%,100%{transform:scale(.96);opacity:.85}35%{transform:scale(1.05);opacity:1}65%{transform:scale(.98);opacity:.88}}
+@keyframes streak{0%,100%{transform:scale(.96);opacity:.82}40%{transform:scale(1.05);opacity:1}70%{transform:scale(.99);opacity:.88}}
+#hint i{display:inline-block;font-style:normal;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(3px)}}
+</style>
+</head>
+<body>
+<!--PAGETOP-->
+<div id="ad" role="link" aria-label="Hisense – zwrot do 5000 PLN">
+  <svg id="bg" viewBox="0 0 300 600" width="300" height="600" aria-hidden="true">
+    <defs>
+      <!-- light frame: brighter, glossier teal with a diagonal sheen -->
+      <linearGradient id="rg" gradientUnits="userSpaceOnUse" x1="-20" y1="-20" x2="320" y2="620">
+        <stop offset="0" stop-color="#1bb3a3"/><stop offset=".28" stop-color="#119585"/>
+        <stop offset=".55" stop-color="#0c8072"/><stop offset=".8" stop-color="#0e8b7d"/><stop offset="1" stop-color="#086a5e"/>
+      </linearGradient>
+      <!-- deep emerald seen through the star hole, darker towards the edges -->
+      <radialGradient id="darkG" gradientUnits="userSpaceOnUse" cx="160" cy="300" r="360">
+        <stop offset="0" stop-color="#0b7466"/><stop offset=".5" stop-color="#065548"/><stop offset="1" stop-color="#03382f"/>
+      </radialGradient>
+      <!-- vignette over the whole background -->
+      <radialGradient id="vig" gradientUnits="userSpaceOnUse" cx="150" cy="280" r="420">
+        <stop offset=".5" stop-color="#001a16" stop-opacity="0"/><stop offset="1" stop-color="#001a16" stop-opacity=".28"/>
+      </radialGradient>
+      <filter id="starShadow" filterUnits="userSpaceOnUse" x="-200" y="-200" width="700" height="1000">
+        <feDropShadow dx="10" dy="18" stdDeviation="9" flood-color="#00241f" flood-opacity=".25"/>
+      </filter>
+    </defs>
+    <!-- dark green background seen through the star-shaped hole -->
+    <rect x="-20" y="-20" width="340" height="640" fill="url(#darkG)"/>
+  </svg>
+
+  <!-- screen 2 stage: both podiums + devices move as one block -->
+  <div id="podia">
+    <div class="l stage" data-off="0.12" id="podN"><img class="m" src="img/x30.webp" alt="" style="width:497px;height:613px;transform:matrix(0.302124,0.000000,-0.000000,0.302309,93.511,327.010)"></div>
+    <div class="l stage" data-off="0" id="podW"><img class="m" src="img/x30.webp" alt="" style="width:497px;height:613px;transform:matrix(0.499775,0.000000,-0.000000,0.500081,15.530,397.795)"></div>
+  </div>
+  <div class="l stage" data-off="0.16" id="star2" data-bottom="345"><img class="m" src="img/x14.webp" alt="" style="width:100px;height:150px;transform:matrix(0.447457,-0.223941,0.223941,0.447457,10.935,277.638)"></div>
+  <div class="l stage" data-off="0.16" id="tv" data-bottom="357.6"><img class="m" src="img/x31.webp" alt="Telewizor Hisense RGB MiniLED" style="width:629px;height:354px;transform:matrix(0.499882,0.000000,-0.000000,0.518090,3.596,174.237)"></div>
+  <div class="l stage" data-off="0.04" id="projV" data-bottom="441.9"><img class="m" src="img/x32.webp" alt="Projektor Hisense" style="width:255px;height:203px;transform:matrix(0.500203,0.000000,-0.000000,0.503245,10.936,339.791)">
+    <svg class="fx" id="fxV" viewBox="0 0 300 600" width="300" height="600" style="position:absolute;left:0;top:0;overflow:visible;mix-blend-mode:screen;opacity:1">
+      <defs>
+        <radialGradient id="lensG"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".25" stop-color="#fff1cf" stop-opacity=".9"/><stop offset=".55" stop-color="#ffc56a" stop-opacity=".45"/><stop offset="1" stop-color="#ff9a2e" stop-opacity="0"/></radialGradient>
+        <linearGradient id="coneG" gradientUnits="userSpaceOnUse" x1="72.7" y1="0" x2="192.7" y2="0"><stop offset="0" stop-color="#fff3d6" stop-opacity=".7"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></linearGradient>
+      </defs>
+      <polygon points="76.7,362.7 76.7,380.7 192.7,411.7 192.7,337.7" fill="url(#coneG)" filter="url(#soft4)" opacity=".7"/>
+      <circle class="halo" cx="72.7" cy="371.7" r="30" fill="url(#lensG)" style="transform-origin:72.7px 371.7px"/>
+      <g class="streak" fill="#fff8e6" filter="url(#soft)" opacity=".9" style="transform-origin:72.7px 371.7px"><ellipse cx="72.7" cy="371.7" rx="46" ry="1.4" transform="rotate(0 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="20" ry="1.0" transform="rotate(90 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="16" ry="0.8" transform="rotate(35 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="16" ry="0.8" transform="rotate(-35 72.7 371.7)"/></g>
+      <circle class="core2" cx="72.7" cy="371.7" r="5" fill="#fff" filter="url(#soft)"/>
+    </svg>
+  </div>
+  <div class="l stage" data-off="0.06" id="projH" data-bottom="442.5"><img class="m" src="img/x33.webp" alt="Laser TV Hisense" style="width:263px;height:88px;transform:matrix(0.500310,0.000000,-0.000000,0.518992,112.461,396.789)">
+    <svg class="fx" id="fxH" viewBox="0 0 300 600" width="300" height="600" style="position:absolute;left:0;top:0;overflow:visible;mix-blend-mode:screen;opacity:1">
+      <defs>
+        <linearGradient id="rayG" gradientUnits="userSpaceOnUse" x1="0" y1="405" x2="0" y2="312">
+          <stop offset="0" stop-color="#fff6e0" stop-opacity=".95"/><stop offset=".35" stop-color="#ffc768" stop-opacity=".5"/><stop offset="1" stop-color="#ff9d2e" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="slotG"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".4" stop-color="#ffe2a8" stop-opacity=".8"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+        <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+        <filter id="soft4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="soft3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.6"/></filter>
+      </defs>
+      <g class="raysH" filter="url(#soft3)" fill="url(#rayG)" style="transform-origin:178px 404px"><polygon opacity="0.73" points="175.8,404.5 177.4,404.5 177.6,331.4 168.9,331.8"/><polygon opacity="0.89" points="182.4,404.5 184.0,404.5 190.8,350.7 184.8,350.2"/><polygon opacity="0.83" points="189.6,404.5 191.2,404.5 168.7,348.3 165.6,349.7"/><polygon opacity="0.79" points="183.4,404.5 185.0,404.5 147.5,317.7 139.4,321.6"/><polygon opacity="0.55" points="159.6,404.5 161.2,404.5 148.3,360.3 142.4,362.3"/><polygon opacity="0.91" points="174.8,404.5 176.4,404.5 166.8,358.7 161.2,360.2"/><polygon opacity="0.70" points="183.7,404.5 185.3,404.5 188.9,327.6 182.9,327.4"/><polygon opacity="0.84" points="190.8,404.5 192.4,404.5 175.7,310.9 166.7,312.8"/><polygon opacity="0.87" points="160.0,404.5 161.6,404.5 153.0,348.5 148.4,349.4"/><polygon opacity="0.92" points="195.5,404.5 197.1,404.5 190.5,317.3 185.2,317.8"/><polygon opacity="0.99" points="176.0,404.5 177.6,404.5 154.6,353.5 147.0,357.5"/><polygon opacity="0.60" points="188.3,404.5 189.9,404.5 187.7,355.8 180.9,356.4"/><polygon opacity="0.51" points="187.5,404.5 189.1,404.5 168.2,346.1 160.0,349.6"/><polygon opacity="0.55" points="189.1,404.5 190.7,404.5 179.1,355.6 176.1,356.4"/><polygon opacity="0.52" points="186.5,404.5 188.1,404.5 193.2,337.4 189.2,337.1"/><polygon opacity="0.60" points="165.7,404.5 167.3,404.5 176.3,354.6 170.9,353.8"/><polygon opacity="0.57" points="192.6,404.5 194.2,404.5 233.4,329.2 229.1,327.1"/></g>
+      <ellipse cx="178" cy="404.5" rx="34" ry="8" fill="url(#slotG)" filter="url(#soft4)" opacity=".85"/>
+      <ellipse class="core" cx="178" cy="404.5" rx="24" ry="3.2" fill="#fffaf0" filter="url(#soft)"/>
+      <circle class="halo h2" cx="178" cy="403" r="30" fill="url(#lensG)" style="transform-origin:178px 403px"/>
+      <g class="streak" fill="#fff8e6" filter="url(#soft)" opacity=".9" style="transform-origin:178px 403px"><ellipse cx="178" cy="403" rx="46" ry="1.4" transform="rotate(0 178 403)"/><ellipse cx="178" cy="403" rx="20" ry="1.0" transform="rotate(90 178 403)"/><ellipse cx="178" cy="403" rx="16" ry="0.8" transform="rotate(35 178 403)"/><ellipse cx="178" cy="403" rx="16" ry="0.8" transform="rotate(-35 178 403)"/></g>
+      <circle class="core2" cx="178" cy="403" r="5" fill="#fff" filter="url(#soft)"/>
+    </svg>
+  </div>
+  <!-- light frame with a star-shaped hole: drawn above the stage, so podiums and devices sit inside the hole;
+       its shadow falls into the hole -->
+  <svg id="frame" viewBox="0 0 300 600" width="300" height="600" aria-hidden="true" style="position:absolute;left:0;top:0;pointer-events:none">
+    <g id="hole" filter="url(#starShadow)">
+      <path fill="url(#rg)" fill-rule="evenodd" d="M-168-118.1v811.9H455.8V-118.1H-168ZM139.7,484.5l-248,109.7L64.9,300-59.8,44l189,33.3,247.2-168.8-132.4,391.5,146.7,167.1,1.6,106.2L139.7,484.5Z"/>
+    </g>
+    <!-- facet highlights + vignette on the frame only -->
+    <g fill-rule="evenodd" pointer-events="none">
+      <path fill="#ffffff" opacity=".07" d="M-60,44 L129.2,77.3 L376.4,-91.5 L-60,-91.5Z"/>
+      <path fill="#000000" opacity=".12" d="M244,300 L390.7,467.1 L390.7,-91.5 L376.4,-91.5Z"/>
+      <path fill="#ffffff" opacity=".05" d="M-108.3,594.2 L139.7,484.5 L392.3,573.3 L392.3,700 L-108.3,700Z"/>
+    </g>
+    <rect x="-20" y="-20" width="340" height="640" fill="url(#vig)" pointer-events="none"/>
+  </svg>
+
+  <!-- screen 1 -->
+  <div class="l orn" id="d2" style="transform-origin:23.0px 192.0px"><div class="fl" style="transform-origin:23.0px 192.0px"><img class="m" src="img/x40.webp" alt="" style="width:58.1px;height:43.6px;transform:translate(-7.0px,170.2px) rotate(-15deg);transform-origin:30.0px 21.8px"></div></div>
+  <div class="l orn" id="d3" style="transform-origin:34.0px 292.0px"><div class="fl" style="transform-origin:34.0px 292.0px"><img class="m" src="img/x41.webp" alt="" style="width:25.6px;height:25.4px;transform:translate(20.4px,279.3px) rotate(0deg);transform-origin:13.6px 12.7px"></div></div>
+  <div class="l orn" id="d4" style="transform-origin:266.0px 163.0px"><div class="fl" style="transform-origin:266.0px 163.0px"><img class="m" src="img/x42.webp" alt="" style="width:49.2px;height:38.5px;transform:translate(241.4px,143.8px) rotate(12deg);transform-origin:24.6px 19.2px"></div></div>
+  <div class="l orn" id="d1" style="transform-origin:284.0px 295.0px"><div class="fl" style="transform-origin:284.0px 295.0px"><img class="m" src="img/x40.webp" alt="" style="width:62.0px;height:46.5px;transform:translate(252.0px,271.8px) rotate(20deg);transform-origin:32.0px 23.2px"></div></div>
+  <div class="l orn" id="d5" style="transform-origin:256.0px 236.0px"><div class="fl" style="transform-origin:256.0px 236.0px"><img class="m" src="img/s_gora_mala.webp" alt="" style="width:32.6px;height:31.7px;transform:translate(238.9px,219.6px) rotate(0deg);transform-origin:17.1px 16.4px"></div></div>
+  <div class="l orn" id="d6" style="transform-origin:142.0px 282.0px"><div class="fl" style="transform-origin:142.0px 282.0px"><img class="m" src="img/s_srodek.webp" alt="" style="width:11.5px;height:17.7px;transform:translate(136.1px,272.6px) rotate(35deg);transform-origin:5.9px 9.4px"></div></div>
+  <div class="l s1" id="para"><img class="m" src="img/x39.webp" alt="Edyta i Cezary Pazurowie" style="width:1040px;height:1005px;transform:matrix(0.499854,-0.009497,0.009497,0.499831,-123.402,148.321)"></div>
+
+  <!-- headlines: every line has its own parent with overflow:hidden; the text slides inside it -->
+  <div id="txt">
+  <div class="line" style="top:63px;height:39px"><svg class="ln1" viewBox="0 0 300 600" width="300" height="600" style="top:-63px"><text x="20.91" y="94.79">My mamy już pomysł</text></svg></div>
+  <div class="line" style="top:102px;height:31px"><svg class="ln1" viewBox="0 0 300 600" width="300" height="600" style="top:-102px"><text x="29.64" y="124.13">na kolorowe święta!</text></svg></div>
+  <div class="line" style="top:82px;height:38px"><svg class="ln2" viewBox="0 0 300 600" width="300" height="600" style="top:-82px"><text x="29.81" y="112.85">Kup TV lub projektor</text></svg></div>
+  <div class="line" style="top:120px;height:30px"><svg class="ln2" viewBox="0 0 300 600" width="300" height="600" style="top:-120px"><text x="45.07" y="142.19">Hisense i odbierz</text></svg></div>
+  <div class="line" style="top:150px;height:32px"><svg class="ln2" viewBox="0 0 300 600" width="300" height="600" style="top:-150px"><text x="41.45" y="171.53">zwrot</text><defs><linearGradient id="goldTxt" gradientUnits="userSpaceOnUse" x1="116" y1="150" x2="266" y2="176"><stop offset="0" stop-color="#c8963a"/><stop offset=".35" stop-color="#e9c06a"/><stop offset=".6" stop-color="#f6dc93"/><stop offset=".8" stop-color="#ddb158"/><stop offset="1" stop-color="#f3d887"/></linearGradient></defs><text class="md gold" x="116.1" y="172.14">do <tspan id="cnt">5000</tspan> PLN</text></svg></div>
+  </div>
+
+  <div class="l" id="logo"><img src="img/logo.svg" alt="Hisense"></div>
+  <div class="l" id="rib"><img class="m" src="img/x34.webp" alt="Cashback" style="width:328px;height:109px;transform:matrix(0.499958,0.000000,-0.000000,0.501487,143.911,18.687)"></div>
+  <div class="l" id="ctaW"><div id="cta">SKORZYSTAJ</div></div>
+  <div class="l" id="hintW"><div id="hint">przewiń <i>↓</i></div></div>
+</div>
+<!--PAGEBOTTOM-->
+<script>
+(function(){
+  "use strict";
+  var ad = document.getElementById("ad");
+  ad.addEventListener("click", function(){ window.open(window.clickTag || clickTag, "_blank"); });
+
+  var E = {
+    lin:function(t){return t;},
+    out:function(t){return 1-Math.pow(1-t,3);},
+    inOut:function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;},
+    in_:function(t){return t*t*t;},
+    back:function(t){var c1=1.4,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);}
+  };
+  function clamp(v){ return v<0?0:v>1?1:v; }
+  function seg(p,a,b,ease){ return (ease||E.inOut)(clamp((p-a)/(b-a))); }
+  function mix(a,b,t){ return a+(b-a)*t; }
+  function $(id){ return document.getElementById(id); }
+  function tf(el,x,y,o,s){
+    el.style.transform="translate3d("+x.toFixed(2)+"px,"+y.toFixed(2)+"px,0)"+(s!=null?" scale("+s.toFixed(4)+")":"");
+    if(o!=null) el.style.opacity=o.toFixed(3);
+  }
+  var TOOTH = 484.5;   // y of the star's bottom tooth (apex of the lower frame wedge)
+  var T1 = {t0:0}, T2 = {t0:0};
+  var S1 = [].slice.call(document.querySelectorAll(".s1"));
+  var FX = [document.getElementById("fxV"), document.getElementById("fxH")];
+  var L1 = [].slice.call(document.querySelectorAll(".ln1")), L2 = [].slice.call(document.querySelectorAll(".ln2"));
+  var ORN = [].slice.call(document.querySelectorAll(".orn"));
+  var STAGE = [].slice.call(document.querySelectorAll(".stage"));
+  var el = { cnt:$("cnt"), logo:$("logo"), rib:$("rib"),
+              hint:$("hintW") };
+  // scale-pops grow from the element's own centre
+
+  /* p = main progress (0..1), v = visible fraction of the ad on screen (-1 = unknown) */
+  function render(p,v){
+    if(v==null) v=-1;
+    var q = clamp((v-.15)/.85);     // background star: grows from 15% visible to 100% visible
+    var a = clamp((v-.60)/.30);     // actors: leave from 60% visible
+    var t, r;
+
+    // background star is static (no animation)
+
+    // screen 1: couple + ornaments slide left with ease-in, fading out together with the move
+    r = Math.max(a, clamp((p-.02)/.24));       // scroll threshold: r > 0 starts the exit
+    var now=performance.now();
+    if(r>0 && !T1.t0) T1.t0=now;
+    if(r<=0 && T1.t0){ T1.t0=0; T2.t0=0; }      // full reset (ad was hidden below the screen)
+    var el1 = T1.t0 ? (now-T1.t0)/1000 : -1;
+    // actors leave on their own timer (not tied to the scroll), ease-in, no fading
+    var ra = el1<0 ? 0 : clamp(el1/.75);
+    var x = mix(0,-440,E.in_(ra));
+    for(var i=0;i<S1.length;i++) tf(S1[i], x, 0, 1);
+    // ornaments: small scale-up first, then shrink away to nothing
+    // ornaments disappear one by one (uneven delays & speeds), all before the actors leave
+    var OFF=[0,.09,.04,.14,.02,.11], DUR=[.18,.14,.22,.16,.12,.2];
+    for(var o=0;o<ORN.length;o++){
+      var st=.46+OFF[o%OFF.length], du=DUR[o%DUR.length];
+      var ro = Math.max(clamp((v-st)/du), clamp((p-OFF[o%OFF.length]*.6)/.12));
+      var os = ro<.3 ? 1+.25*E.out(ro/.3) : 1.25*(1-E.in_((ro-.3)/.7));
+      tf(ORN[o], 0, 0, ro>=1?0:1, Math.max(0,os));
+    }
+    // screen-1 lines: once the threshold is crossed (actors start leaving) they hide on their own timer,
+    // one after another, sliding DOWN inside their own overflow:hidden parent
+    for(var n=0;n<L1.length;n++){ var lr = el1<0 ? 0 : E.in_(clamp((el1-n*.12)/.38)); L1[n].style.transform="translateY("+mix(0,36,lr).toFixed(2)+"px)"; }
+    el.hint.style.opacity = (1-Math.max(clamp(ra*3), seg(p,0,.06,E.lin))).toFixed(3);
+
+    // screen 2: whole stage (podium 1 + podium 2 + TV + projectors + star) slides up as one block
+    var st0 = Math.max(clamp((v-.65)/.45), clamp(p/.30));
+    for(var j=0;j<STAGE.length;j++){
+      // slight offset: lower podium + its devices first, upper podium + TV a moment later
+      var off = +(STAGE[j].getAttribute("data-off")||0);
+      var sy = mix(470,0,E.out(clamp((st0-off)/(1-.16))));
+      tf(STAGE[j], 0, sy, 1);
+      var bot = STAGE[j].getAttribute("data-bottom");
+      if(bot) STAGE[j].classList.toggle("up", (+bot + sy) < TOOTH);
+    }
+
+    // projector lights are always on
+
+    // logo glides from screen-1 position to screen-2 position
+    t = E.inOut(ra); tf(el.logo, mix(0,19.98-89.53,t), mix(0,28.74-33.05,t), 1);   // logo moves together with the actors
+
+    // headline 2 + cash counter
+    t = seg(p,.30,.50,E.out);
+    // screen-2 lines rise out of their masks one after another
+    // screen-2 lines: once the screen-1 lines are gone they play on their own timer (not tied to the scroll)
+    var go2 = el1 >= .62;                        // a moment after the screen-1 lines are gone
+    if(go2 && !T2.t0) T2.t0=performance.now();
+    var el2 = T2.t0 ? (performance.now()-T2.t0)/1000 : -1;
+    for(var n2=0;n2<L2.length;n2++){
+      var lt = el2<0 ? 0 : E.out(clamp((el2-.05-n2*.09)/.32));
+      L2[n2].style.transform="translateY("+mix(34,0,lt).toFixed(2)+"px)";
+    }
+    var cc = el2<0 ? 0 : E.out(clamp((el2-.35)/1.1));
+    el.cnt.textContent = String(Math.round(cc*5000/50)*50);
+
+    // end frame
+    t = E.inOut(ra); tf(el.rib, mix(170,0,t), 0, 1);   // cashback ribbon slides in together with the logo move
+    // CTA button is visible the whole time (no animation)
+  }
+
+  /* ---------- progress sources ---------- */
+  var target=0, current=0, targetV=null, currentV=-1, source="none";
+  // main progress: starts when ad centre is at 62% of viewport height, ends at 20%
+  function fromRect(top,h,vh){ return clamp((vh*0.62 - (top+h/2)) / (vh*0.42)); }
+  // one-way: the story only moves forward while scrolling down; scrolling back up keeps the current state.
+  // It resets only once the ad is completely hidden BELOW the screen (user went back above it).
+  function setRect(top,h,vh){
+    var p=fromRect(top,h,vh), v=(vh-top)/h;
+    if(v<=0.02){ target=current=0; targetV=currentV=v; T1.t0=0; T2.t0=0; render(0,v); return; }   // schowana: natychmiastowy reset, bez animacji powrotu            // fully below the viewport -> reset
+    target=Math.max(target,p); targetV=Math.max(targetV==null?-1:targetV, v);
+  }
+  window.HisenseAd = { state:function(){ return {target:target,targetV:targetV,current:current,currentV:currentV,source:source}; }, set:function(v){ target=current=clamp(+v); targetV=null; currentV=-1; source="api"; render(current,currentV); } };
+
+  // A) host page sends geometry / progress via postMessage
+  window.addEventListener("message", function(e){
+    var d=e.data; if(!d||typeof d!=="object") return;
+    if(d.type==="hisense-scroll" && typeof d.progress==="number"){ target=clamp(d.progress); targetV=null; }
+    else if(d.type==="hisense-geom"){ setRect(d.top,d.height,d.vh); }
+    else return;
+    source="postMessage";
+  });
+
+  // B) same-origin iframe: read our position from the parent page
+  var fe=null; try{ fe=window.frameElement; }catch(err){ fe=null; }
+  if(/nodata/.test(location.hash)) fe=null;
+  if(fe && window.parent){
+    var pw=window.parent;
+    var onPar=function(){ if(source==="postMessage"||source==="api"||source==="scroll") return;
+      var rr=fe.getBoundingClientRect(); setRect(rr.top,rr.height,pw.innerHeight); source="sameOrigin"; };
+    try{ pw.addEventListener("scroll",onPar,{passive:true}); pw.addEventListener("resize",onPar); onPar(); }catch(err){}
+  }
+
+  // C) SafeFrame (GAM)
+  try{
+    if(window.$sf && $sf.ext && $sf.ext.register){
+      $sf.ext.register(300,600,function(status){
+        if(status!=="geom-update") return;
+        var g=$sf.ext.geom(); if(!g||!g.self||!g.win) return;
+        setRect(g.self.t-g.win.t,600,g.win.h); source="safeframe";
+      });
+    }
+  }catch(err){}
+
+  /*SCROLLSOURCE*/
+  // D) fallback: no scroll data at all -> play once when the ad is in view
+  var auto=null;
+  function startAuto(){
+    if(auto) return; source="autoplay";
+    var t0=performance.now();
+    auto=function(now){ if(source!=="autoplay"){auto=null;return;}
+      var e=now-t0; target = e<1400?0:Math.min(1,(e-1400)/4200); requestAnimationFrame(auto); };
+    requestAnimationFrame(auto);
+  }
+  if(source==="none"){
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(en){
+        if(en[0].intersectionRatio>=.5){ setTimeout(function(){ if(source==="none") startAuto(); },1200); io.disconnect(); }
+      },{threshold:[0,.5,1]});
+      io.observe(ad);
+    } else setTimeout(function(){ if(source==="none") startAuto(); },1500);
+  }
+
+  /* ---------- render loop with ~1.2 s glide ---------- */
+  var lastT=0;
+  function tick(now){
+    var dt=Math.min(.1,((now||0)-lastT)/1000); lastT=now||0;
+    var k = source==="autoplay" ? 1 : 1-Math.exp(-dt/0.4);
+    current += (target-current)*k; if(Math.abs(target-current)<.0005) current=target;
+    var tv = targetV==null ? -1 : targetV;
+    currentV += (tv-currentV)*k;
+    render(current,currentV);
+    try{ if(window.parent!==window) window.parent.postMessage({type:"hisense-state",progress:current,source:source},"*"); }catch(err){}
+    requestAnimationFrame(tick);
+  }
+  var started=false;
+  function go(){ if(started) return; started=true; render(0,-1); ad.classList.add("ready"); requestAnimationFrame(tick); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(go); setTimeout(go,1500); }
+  else window.addEventListener("load",go);
+})();
+</script>
+</body>
+</html>

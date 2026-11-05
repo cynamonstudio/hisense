@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="pl" class="loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hisense – propozycje formatów</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --t1:#0d8577; --t2:#09685d; --t3:#064f46; --band:#12998a; --band2:#0f8a7c;
+    --gold:#d8ae6d; --gold2:#f1d593; --ink:#fff;
+    --sans:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; overflow:hidden; color:var(--ink); font-family:var(--sans); font-weight:400;
+    background:radial-gradient(ellipse 70% 90% at 22% 8%, var(--t1) 0%, var(--t2) 45%, var(--t3) 100%) fixed, var(--t2); }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 90% 80% at 50% 45%, transparent 55%, rgba(0,30,26,.28) 100%); }
+
+  /* ładowanie */
+  .loader { position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1.4rem; background:inherit; }
+  .loader[hidden] { display:none; }
+  .loader { align-items:stretch; }
+  .loader .track { width:100%; height:1px; background:rgba(255,255,255,.18); overflow:hidden; }
+  .loader .fill { width:0; height:100%; background:var(--gold); transition:width .25s ease; }
+  .loading #art { visibility:hidden; }
+
+  /* cała prezentacja to plansza 1600×900 skalowana do okna, przyklejona do dołu ekranu */
+  #art { position:absolute; left:50%; bottom:0; width:1600px; height:900px; transform-origin:50% 100%; transform:translateX(-50%) scale(var(--s,1)); }
+
+  /* ===== pasek dolny ===== */
+  .band { position:absolute; left:0; right:0; bottom:0; height:94px; z-index:30; display:flex; align-items:center; }
+  .band::before { content:""; position:absolute; top:0; bottom:-400px; left:0; right:0; z-index:-1;
+    background:radial-gradient(ellipse 60% 260% at 30% 0%, var(--t1) 0%, var(--t2) 45%, var(--t3) 100%); border-top:1px solid var(--gold); }
+  .band .ddx { position:absolute; left:44px; top:50%; transform:translateY(-50%); height:40px; }
+  .band .ddx svg { height:100%; width:auto; display:block; }
+  .band .hs { position:absolute; right:106px; top:50%; transform:translateY(-50%); width:150px; display:block; }
+  .dashes { position:absolute; left:300px; right:300px; top:0; bottom:0; display:flex; align-items:center; justify-content:center; gap:26px; }
+  .dashes .dash { position:relative; width:100px; height:44px; background:none; border:0; cursor:pointer; color:#fff; font:500 12px/1 var(--sans); letter-spacing:.12em; text-transform:uppercase; }
+  .dashes .dash::after { content:""; position:absolute; left:0; right:0; top:28px; height:2px; border-radius:1px; background:var(--gold); opacity:.42; transition:opacity .3s; }
+  .dashes .dash span { position:absolute; left:0; right:0; top:6px; text-align:center; opacity:0; transform:translateY(4px); transition:opacity .3s, transform .3s; white-space:nowrap; }
+  .dashes .dash:hover span, .dashes .dash.on span { opacity:.95; transform:none; }
+  .dashes .dash.on::after { opacity:1; background:linear-gradient(90deg, var(--gold), var(--gold2), var(--gold)); }
+  .dashes .dash:hover::after { opacity:.8; }
+  .fs { position:relative; margin-left:14px; top:5px; width:36px; height:36px; flex:none; display:flex; align-items:center; justify-content:center; background:none; border:1px solid var(--gold); color:var(--gold2); cursor:pointer; transition:background .2s; }
+  .fs:hover { background:rgba(216,174,109,.15); }
+  .fs svg { width:18px; height:18px; stroke-width:1.6; }
+  .fs .off, .fs.on .in { display:none; } .fs.on .off { display:block; }
+
+  /* ===== strzałki: złote okręgi ===== */
+  .arrow { position:absolute; top:370px; z-index:25; width:48px; height:48px; border-radius:50%; border:1px solid var(--gold); background:transparent; color:var(--gold); cursor:pointer; transition:background .25s, transform .25s; }
+  .arrow::before { content:""; position:absolute; inset:-1px; border-radius:50%; border:1px solid var(--gold); opacity:0; }
+  .arrow:hover { background:rgba(216,174,109,.14); }
+  .arrow:hover::before { animation:echo 1.5s ease-out infinite; }
+  @keyframes echo { from { transform:scale(1); opacity:.7; } to { transform:scale(1.45); opacity:0; } }
+  .arrow i { position:absolute; left:50%; top:50%; width:9px; height:9px; border-top:1.5px solid currentColor; border-right:1.5px solid currentColor; }
+    .arrow.prev { left:22px; } .arrow.next { right:22px; }
+  .arrow.prev i { transform:translate(-30%,-50%) rotate(-135deg); }
+  .arrow.next i { transform:translate(-70%,-50%) rotate(45deg); }
+  .arrow[hidden] { display:none; }
+
+  /* ===== slajdy ===== */
+  .slide { position:absolute; left:50%; margin-left:-800px; top:0; width:1600px; height:900px; display:none; }
+  .slide.active { display:block; }
+  .copy { position:absolute; z-index:5; }
+  .copy .logo { display:block; width:250px; margin:0 auto 34px; }
+  h1 { font-weight:500; font-size:50px; line-height:1.18; letter-spacing:-.01em; white-space:pre-line; }
+  .sub { font-weight:500; font-size:50px; line-height:1.18; letter-spacing:-.01em; white-space:pre-line;
+    background:linear-gradient(100deg, #c8963a 0%, #e9c06a 30%, #f6dc93 55%, #ddb158 80%, #f3d887 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .lead { margin-top:28px; font-size:18px; line-height:1.55; font-weight:400; color:rgba(225,236,233,.78); white-space:pre-line; }
+  .pills { margin-top:34px; display:flex; flex-wrap:wrap; gap:12px; }
+  .pill { font:500 13px/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; padding:13px 18px; border:1.5px solid rgba(216,174,109,.75); color:#fff; }
+  .pill.lg { display:flex; align-items:center; justify-content:center; height:46px; padding:0 18px; }
+  .pill.lg img { display:block; width:auto; }
+  @keyframes pillIn { from { opacity:0; transform:translateY(10px) scale(.92); } to { opacity:1; transform:none; } }
+  .pills.logos { gap:10px; max-width:600px; margin-left:auto; margin-right:auto; }
+  .ch { opacity:0; animation:chIn .5s ease forwards; }
+  @keyframes chIn { to { opacity:1; } }
+
+  /* plansza z Pazurami */
+  .hero .copy { left:250px; top:118px; width:620px; text-align:center; }
+  .hero .lead { max-width:540px; margin-left:auto; margin-right:auto; }
+  .hero .pills { justify-content:center; }
+  .hero .para { position:absolute; left:850px; top:58px; height:765px; z-index:4; filter:drop-shadow(26px 20px 26px rgba(0,30,26,.28)); }
+  .hero.active .para { animation:paraIn 1.1s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes paraIn { from { opacity:0; transform:translateX(70px); } to { opacity:1; transform:none; } }
+  .orn { position:absolute; z-index:3; filter:drop-shadow(6px 9px 8px rgba(0,30,26,.25)); }
+  .orn img { display:block; width:100%; animation:float 4s ease-in-out infinite; }
+  .orn.rm { filter:none; }
+  .orn.kul img { animation:flKul 3.4s ease-in-out infinite, glint 3s ease-in-out infinite; }
+  @keyframes flKul { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-7px); } }
+  .hero.active .orn { animation:pop .7s cubic-bezier(.3,1.6,.5,1) both; }
+  @keyframes pop { from { transform:scale(0); } to { transform:none; } }
+  @keyframes float { 0%,100% { transform:translateY(3px) rotate(-8deg); } 50% { transform:translateY(-7px) rotate(8deg); } }
+  /* ozdobniki z reklamy rich media: kołysanie + delikatny złoty błysk */
+  .orn img { will-change:transform; backface-visibility:hidden; }
+  .orn.rm img { animation:flRM 3.6s ease-in-out infinite, glint 3s ease-in-out infinite; }
+  @keyframes flRM { 0%,100% { transform:translateY(3px) rotate(-14deg) scale(.94); } 50% { transform:translateY(-7px) rotate(14deg) scale(1.08); } }
+  @keyframes glint { 0%,62%,100% { filter:brightness(1) drop-shadow(0 0 0 rgba(255,226,150,0)); } 74% { filter:brightness(1.35) drop-shadow(0 0 8px rgba(255,226,150,.85)); } 84% { filter:brightness(1.05) drop-shadow(0 0 3px rgba(255,226,150,.3)); } }
+  .thanks .copy { top:250px; }
+  .thanks h1 { font-size:76px; }
+
+  /* urządzenia na złotych podestach */
+  .podium { position:absolute; z-index:2; display:block; filter:drop-shadow(0 30px 40px rgba(0,30,26,.3)); }
+  .dev { position:absolute; z-index:3; }
+  .slide.active .podium { animation:podIn .9s cubic-bezier(.2,.8,.2,1) both; }
+  .slide.active .dev { animation:devIn 1s cubic-bezier(.2,.8,.2,1) .18s both; }
+  @keyframes podIn { from { transform:translateY(140px); } to { transform:none; } }
+  @keyframes devIn { from { opacity:0; transform:translateY(-34px); } to { opacity:1; transform:none; } }
+  .glow { position:absolute; z-index:1; border-radius:50%; pointer-events:none; background:radial-gradient(closest-side, rgba(150,255,235,.22), transparent); }
+
+  .s-rm .podium { left:405px; top:709px; width:390px; }
+  .s-rm .dev { left:428px; top:76px; width:344px; }
+  .s-rm .glow { left:200px; top:60px; width:800px; height:700px; }
+  .s-rm .copy, .s-is .copy { top:210px; width:520px; }
+  .s-rm .copy { left:900px; }
+  .s-is .podium, .s-im .podium { left:240px; top:643px; width:560px; }
+  .s-is .dev, .s-im .dev { left:120px; top:170px; width:800px; }
+  .s-is .glow, .s-im .glow, .s-ctv .glow { left:60px; top:60px; width:1000px; height:700px; }
+  .s-is .copy, .s-im .copy, .s-ctv .copy { left:1000px; width:420px; top:210px; }
+
+
+  /* CTV: telewizor z ramką L (squeeze-back) */
+  .s-ctv .podium { left:330px; top:659px; width:420px; }
+  .s-ctv .dev { left:150px; top:175px; width:780px; }
+  .tv .screen { left:1.39220366%; top:2.13299875%; width:97.05648369%; height:86.07277290%; background:#000; }
+  .ctvw { position:absolute; top:0; bottom:0; left:50%; height:100%; aspect-ratio:16/9; transform:translateX(-50%); overflow:hidden; background:#06433b; }
+  .ctvw .ramka { position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; transition:opacity .8s ease; }
+  .prog { position:absolute; left:0; top:0; width:100%; height:100%; overflow:hidden; z-index:2; transition:left 1s cubic-bezier(.6,0,.2,1), top 1s cubic-bezier(.6,0,.2,1), width 1s cubic-bezier(.6,0,.2,1), height 1s cubic-bezier(.6,0,.2,1);
+    background:radial-gradient(circle at 70% 32%, #ffe3a3 0, #ffb25c 5%, rgba(255,140,80,0) 16%),
+      radial-gradient(ellipse 80% 40% at 25% 105%, #1d3f4f 0 60%, transparent 61%), radial-gradient(ellipse 90% 45% at 80% 112%, #12303d 0 60%, transparent 61%),
+      linear-gradient(#25507a 0%, #6a7fa6 45%, #e8a07a 78%, #f3c38a 100%); }
+  .prog::after { content:""; position:absolute; inset:0; background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.08) 50%, transparent 70%); animation:progLight 6s ease-in-out infinite; }
+  @keyframes progLight { 0%,100% { transform:translateX(-30%); } 50% { transform:translateX(30%); } }
+  .prog .live { position:absolute; left:2.4%; top:4%; font:700 1.6cqw/1 Arial,sans-serif; letter-spacing:.06em; color:#fff; background:rgba(0,0,0,.45); padding:.7cqw 1.1cqw; border-radius:.4cqw; z-index:2; }
+  .prog .live i { display:inline-block; width:.9cqw; height:.9cqw; border-radius:50%; background:#ff3b3b; margin-right:.7cqw; animation:blink 1.2s steps(2) infinite; }
+  @keyframes blink { 50% { opacity:.2; } }
+  .progv { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1; }
+  .ctvw.go .prog { left:1.46%; top:3.15%; width:73.28%; height:68.24%; }
+  .ctvw.go .ramka { opacity:1; transition-delay:.35s; }
+
+
+  /* YouTube: laptop z otwartą stroną YouTube, wideo w odtwarzaczu */
+  .s-yt .podium { left:240px; top:643px; width:560px; }
+  .s-yt .dev { left:120px; top:170px; width:800px; }
+  .s-yt .screen { z-index:4; background:#fff; }
+  .ytpage { position:absolute; inset:0; overflow:hidden; background:#fff; }
+  .ytover { position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; z-index:2; }
+  .ytplayer { position:absolute; left:.667%; top:17.94%; width:68.5%; height:59.1%; background:#000; overflow:hidden; z-index:1; container-type:inline-size; }
+  .s-yt .glow { left:60px; top:60px; width:1000px; height:700px; }
+  .s-yt .copy { left:1000px; width:420px; top:210px; }
+  .ytlap .screen { left:15.97%; top:17.55%; width:47.57%; height:42.26%; background:#000; }
+  .ytv { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .ytui { position:absolute; inset:0; font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#fff; }
+  .yad { position:absolute; left:2.2%; bottom:7%; display:flex; align-items:center; gap:1.4cqw; background:rgba(0,0,0,.6); padding:1cqw 1.6cqw; border-radius:.8cqw; font:500 2.1cqw/1.2 inherit; }
+  .yad img { width:9cqw; display:block; }
+  .yad b { font-weight:700; display:block; } .yad small { opacity:.85; font-size:1.8cqw; }
+  .ycta { position:absolute; right:2.2%; bottom:7%; background:#3ea6ff; color:#0f0f0f; font:600 2.2cqw/1 inherit; padding:1.6cqw 2.8cqw; border-radius:99px; }
+  .ybar { position:absolute; left:0; right:0; bottom:0; height:.55cqw; background:rgba(255,255,255,.35); }
+  .ybar i { position:absolute; left:0; top:0; bottom:0; width:0; background:#ffd400; }
+
+  /* Impact Max multiscreen w laptopie */
+  .s-im .dsk .chrome { height:4.6cqw; gap:.8cqw; padding:0 1.6cqw; }
+  .s-im .dsk .chrome i { width:1.1cqw; height:1.1cqw; }
+  .s-im .dsk .chrome span { height:2.8cqw; border-radius:1.4cqw; font-size:1.35cqw; line-height:2.8cqw; max-width:42cqw; margin-left:1.8cqw; }
+  /* billboard Impact Max: podesty wysuwają się spod boksu z treścią, potem logo i hasło; reszta grafiki stoi */
+  .imaxw { position:absolute; left:0; top:4.6cqw; width:100%; aspect-ratio:1600/931; overflow:hidden; }
+  .imaxw img { position:absolute; display:block; pointer-events:none; }
+  .imaxw .ibg { left:0; top:0; width:100%; height:100%; }
+  .imaxw .iclip { position:absolute; left:0; top:0; width:100%; height:35.306%; overflow:hidden; }
+  .imaxw .ipodw { position:absolute; left:21.556%; top:8.664%; width:28.328%; height:91.34%; transform:translateY(110%); }
+  .imaxw .ipod { left:0; top:0; width:100%; height:100%; }
+  .imaxw.play .ipodw { transform:none; transition:transform 1.1s cubic-bezier(.2,.9,.25,1.04); }
+  /* światło projektorów: efekt z kreacji rich media (blend screen, migotanie) */
+  .ifx { position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; mix-blend-mode:screen; opacity:0; transition:opacity .6s ease 1.1s; pointer-events:none; }
+  .imaxw.play .ifx { opacity:1; }
+  .ifx .halo, .ifx .streak, .ifx .core, .ifx .core2 { transform-box:fill-box; transform-origin:center; }
+  .ifx .raysH { transform-box:fill-box; transform-origin:50% 100%; animation:rays 1.3s ease-in-out infinite; }
+  .ifx .core { animation:flick 1.05s ease-in-out infinite; }
+  .ifx .core2 { animation:flick .85s ease-in-out infinite; }
+  .ifx .halo { animation:halo 1.2s ease-in-out infinite; }
+  .ifx .halo.h2 { animation-duration:1s; animation-delay:-.7s; }
+  .ifx .streak { animation:streak .95s ease-in-out infinite; }
+  @keyframes rays { 0%,100% { opacity:.85; transform:scaleY(.97); } 30% { opacity:1; transform:scaleY(1.02); } 55% { opacity:.8; } 78% { opacity:.95; transform:scaleY(1); } }
+  @keyframes flick { 0%,100% { opacity:.85; } 25% { opacity:1; } 45% { opacity:.78; } 70% { opacity:.96; } }
+  @keyframes halo { 0%,100% { transform:scale(.96); opacity:.85; } 35% { transform:scale(1.05); opacity:1; } 65% { transform:scale(.98); opacity:.88; } }
+  @keyframes streak { 0%,100% { transform:scale(.96); opacity:.82; } 40% { transform:scale(1.05); opacity:1; } 70% { transform:scale(.99); opacity:.88; } }
+  /* ozdobniki kołyszą się i błyszczą */
+  .iorns { position:absolute; inset:0; }
+  .iorn { position:absolute; }
+  .iorn.st img { animation:none !important; }
+  @keyframes flIM { 0%,100% { transform:translate3d(0,1.5px,0) rotate(-7deg) scale(.97); } 50% { transform:translate3d(0,-2.5px,0) rotate(7deg) scale(1.04); } }
+  .iorn img { position:relative; display:block; width:100%; will-change:transform; backface-visibility:hidden; animation-name:flIM, glint; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+  .imaxw .ilogo { left:16.138%; top:9.309%; width:13.119%; opacity:0; transform:scale(.85); }
+  .imaxw .itxt { left:51.432%; top:11.702%; width:29.644%; opacity:0; transform:translateY(18%); }
+  .imaxw.play .ilogo { opacity:1; transform:none; transition:opacity .6s ease .7s, transform .7s cubic-bezier(.3,1.5,.5,1) .7s; }
+  .imaxw.play .itxt { opacity:1; transform:none; transition:opacity .6s ease 1s, transform .7s cubic-bezier(.2,.8,.2,1) 1s; }
+  .imax-unused { object-fit:cover; object-position:50% 0; display:block; }
+
+  /* ramka urządzenia: ekran = otwór w obrazku */
+  .dev > img.frame { position:relative; display:block; width:100%; z-index:3; pointer-events:none; user-select:none; }
+  .screen { position:absolute; z-index:1; overflow:hidden; background:#000; container-type:inline-size; }
+  .s-is .screen, .s-im .screen { z-index:4; background:transparent; }
+  .phone .screen { left:11.13%; top:4.8%; width:78.54%; height:88.62%; }
+  .laptop .screen { left:9.43%; top:5.19%; width:81.15%; height:81.98%; }
+
+  /* rich media w telefonie: przewijany portal */
+  .scroller { position:absolute; inset:0; overflow-y:scroll; overflow-x:hidden; scrollbar-width:none; overscroll-behavior:contain; cursor:grab; user-select:none; -webkit-user-select:none; background:#fff; }
+  .scroller::-webkit-scrollbar { display:none; }
+  .page { position:relative; width:100%; padding-top:9cqw; }
+  .page .bar { position:sticky; top:9cqw; z-index:3; height:12cqw; background:#fff; border-bottom:1px solid #eee; box-shadow:0 1px 6px rgba(0,0,0,.05); display:flex; align-items:center; padding:0 5cqw; font:700 4.2cqw/1 var(--sans); color:#000; }
+  .page .bar span { margin-left:auto; display:flex; flex-direction:column; gap:3px; }
+  .page .bar span i { display:block; width:16px; height:2px; background:#000; }
+  .page .pimg { position:relative; z-index:2; display:block; margin:5cqw 0 0 7.8%; width:84.94%; height:auto; pointer-events:none; }
+  /* linie jak w grafice portalu: 13 px grubości, co 33 px, szer. 50–508 z 551 */
+  .page .plines { position:relative; z-index:2; margin:9.8cqw 7.8% -8cqw 9.07%; display:flex; flex-direction:column; gap:3.63cqw; }
+  .page .plines i { display:block; height:2.36cqw; border-radius:1.18cqw; background:#e8e8e8; }
+  .page img.portal { position:relative; display:block; width:100%; height:auto; z-index:1; pointer-events:none; }
+  .slot { position:absolute; z-index:0; overflow:hidden; left:7.804%; width:84.755%; }
+  .slot iframe { position:absolute; left:0; top:0; width:300px; height:600px; border:0; transform-origin:0 0; pointer-events:none; background:#033a33; }
+  .sb { position:absolute; left:0; right:0; top:0; height:9cqw; display:flex; align-items:center; justify-content:space-between; padding:0 7cqw; font:600 3.3cqw/1 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#111; background:#fff; z-index:5; }
+  .sb i { font-style:normal; letter-spacing:.1em; font-size:2.8cqw; }
+  .hint { position:absolute; left:50%; top:62%; width:56px; height:56px; margin:-28px 0 0 -28px; z-index:6; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(6,89,78,.85); color:#fff; pointer-events:none; transition:opacity .4s; animation:hintBob 1.6s ease-in-out infinite; box-shadow:0 0 0 0 rgba(216,174,109,.6); }
+  .hint svg { width:26px; height:26px; }
+  .hint.used { opacity:0; }
+  @keyframes hintBob { 0%,100% { transform:translateY(0); box-shadow:0 0 0 0 rgba(216,174,109,.55); } 50% { transform:translateY(-14px); box-shadow:0 0 0 12px rgba(216,174,109,0); } }
+
+  /* interstitial w laptopie */
+  .dsk { position:absolute; left:0; right:0; top:0; bottom:0; overflow:hidden; background:#fff; }
+  .dsk .chrome { position:absolute; left:0; right:0; top:0; height:3cqw; background:#e9e9ec; border-bottom:1px solid #d0d0d4; display:flex; align-items:center; gap:.6cqw; padding:0 1.2cqw; z-index:2; }
+  .dsk .chrome i { width:.8cqw; height:.8cqw; border-radius:50%; background:#ff5f57; } .dsk .chrome i:nth-child(2) { background:#febc2e; } .dsk .chrome i:nth-child(3) { background:#28c840; }
+  .dsk .chrome span { margin-left:1.4cqw; flex:1; max-width:36cqw; height:1.9cqw; border-radius:1cqw; background:#fff; font:400 1cqw/1.9cqw Arial,sans-serif; color:#555; padding:0 1.2cqw; }
+  .dsk .pg { position:absolute; left:0; right:0; top:3cqw; bottom:0; display:flex; gap:3cqw; padding:2cqw 4cqw; overflow:hidden; filter:blur(1px); }
+  .dsk .pg img { flex:1; min-width:0; width:30%; height:auto; align-self:flex-start; }
+  .ist { position:absolute; left:0; right:0; top:3cqw; bottom:0; z-index:3; display:flex; flex-direction:column; background:#022b25; }
+  .ist[hidden] { display:none; }
+  .ist .topb { flex:none; display:flex; align-items:center; gap:1cqw; padding:.6cqw 1.4cqw; min-height:3.2cqw; background:#181818; font:600 1cqw/1 Arial,sans-serif; }
+  .ist .topb .ad { background:rgba(255,255,255,.12); padding:.5cqw .8cqw; border-radius:.5cqw; letter-spacing:.05em; }
+  .ist .topb .skip { opacity:.8; font-weight:400; }
+  .ist .topb .x { margin-left:auto; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.5); padding:.5cqw 1cqw; border-radius:99px; font:inherit; color:#fff; cursor:pointer; }
+  .ist .topb .x:disabled { opacity:.55; cursor:default; }
+  .ist .area { position:relative; flex:1; min-height:0; overflow:hidden; }
+  .ist iframe { position:absolute; border:0; display:block; background:#022b25; }
+
+  @media (prefers-reduced-motion:reduce) { .orn img, .hint { animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader" role="status" aria-label="Ładowanie prezentacji">
+  <div class="track"><div class="fill" id="fill"></div></div>
+</div>
+
+<main id="art">
+
+  <!-- 1: Pazurowie -->
+  <section class="slide hero active" data-label="Start">
+    <div class="copy">
+      <img class="logo" src="assets/img/logo_hisense.svg" alt="Hisense">
+      <h1>My mamy już pomysł
+na kolorowe święta!</h1>
+      <p class="lead">Świąteczna kampania cashback z Edytą i Cezarym Pazurami: kup telewizor lub projektor Hisense i odbierz zwrot do 5000 PLN. Na kolejnych slajdach pokazujemy formaty rich media w kontekście portalu.</p>
+      <div class="pills logos"><span class="pill lg"><img src="assets/img/ctv/canal_plus.webp" alt="CANAL+" style="height:16.7px"></span><span class="pill lg"><img src="assets/img/ctv/hbo_max.webp" alt="HBO Max" style="height:26px"></span><span class="pill lg"><img src="assets/img/ctv/player.webp" alt="Player" style="height:20.9px"></span><span class="pill lg"><img src="assets/img/ctv/polsat_box.webp" alt="Polsat Box" style="height:15.7px"></span><span class="pill lg"><img src="assets/img/ctv/tvn24_plus.webp" alt="TVN24+" style="height:18.5px"></span><span class="pill lg"><img src="assets/img/ctv/tvp.webp" alt="TVP" style="height:23.7px"></span><span class="pill lg"><img src="assets/img/ctv/youtube.webp" alt="YouTube" style="height:18.1px"></span></div>
+    </div>
+    <img class="para" src="assets/img/para.webp" alt="Edyta i Cezary Pazurowie">
+    <div class="orn rm" style="left:1375px;top:79px;width:80px;animation-delay:.5s"><img src="assets/img/orn_koniczyna.webp" alt=""></div>
+    <div class="orn rm" style="left:1474px;top:216px;width:53px;animation-delay:.65s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-1.4s,-.4s"></div>
+    <div class="orn rm" style="left:1406px;top:586px;width:60px;animation-delay:.8s"><img src="assets/img/orn_romb.webp" alt="" style="animation-delay:-2.1s,-1.9s"></div>
+    <div class="orn rm" style="left:98px;top:90px;width:85px;animation-delay:.55s"><img src="assets/img/orn_koniczyna.webp" alt="" style="animation-delay:-.7s,-1.1s"></div>
+    <div class="orn rm" style="left:58px;top:496px;width:53px;animation-delay:.7s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-2.6s,-2.3s"></div>
+    <div class="orn rm" style="left:196px;top:636px;width:58px;animation-delay:.9s"><img src="assets/img/orn_romb.webp" alt="" style="animation-delay:-1.1s,-.9s"></div>
+    <div class="orn rm" style="left:793px;top:115px;width:46px;animation-delay:.75s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-3s,-1.5s"></div>
+    <div class="orn rm kul" style="left:788px;top:616px;width:29px;animation-delay:.95s"><img src="assets/img/kulka.webp" alt="" style="animation-delay:-1.8s,-.6s"></div>
+</section>
+
+  <!-- 3: interstitial 1920x1080 w laptopie -->
+  <section class="slide s-is" data-label="Interstitial">
+    <div class="glow"></div>
+    <img class="podium" src="assets/img/podium_top.webp" alt="">
+    <div class="dev laptop">
+      <div class="screen">
+        <div class="dsk">
+          <div class="chrome"><i></i><i></i><i></i><span>portal.pl/wiadomosci</span></div>
+          <div class="pg"><img alt="" src="assets/portal/portal.png"><img alt="" src="assets/portal/portal.png"><img alt="" src="assets/portal/portal.png"></div>
+          <div class="ist">
+            <div class="topb"><span class="ad">REKLAMA</span><span class="skip" aria-live="polite">Możesz zamknąć reklamę za 7 s</span><button class="x" type="button" disabled>Zamknij reklamę ✕</button></div>
+            <div class="area"><iframe data-src="formaty/i1920/index.html" title="Hisense interstitial 1920×1080" scrolling="no" tabindex="-1"></iframe></div>
+          </div>
+        </div>
+      </div>
+      <img class="frame" src="assets/frames/laptop2_clean.png" alt="">
+    </div>
+    <div class="copy">
+      <h1>Interstitial</h1><div class="sub">1920×1080</div>
+      <p class="lead">Reklama na cały ekran przeglądarki, wyświetlana przy przejściu między stronami portalu. Pazurowie wchodzą z prawej, złote ozdoby rozbłyskują, a urządzenia Hisense wyjeżdżają na podestach razem z hasłem i zwrotem do 5000 PLN.</p>
+      <div class="pills"><span class="pill">Desktop 1920×1080</span><span class="pill">Pełny ekran</span></div>
+    </div>
+  </section>
+
+  <!-- 4: CTV z ramką -->
+  <section class="slide s-ctv" data-label="CTV">
+    <div class="glow"></div>
+    <img class="podium" src="assets/img/podium_top.webp" alt="">
+    <div class="dev tv">
+      <div class="screen">
+        <div class="ctvw">
+          <img class="ramka" src="assets/img/ctv_grafika.webp" alt="Ramka CTV Hisense">
+          <div class="prog"><video class="progv" src="assets/video/ctv_loop.mp4" muted loop playsinline preload="auto"></video></div>
+        </div>
+      </div>
+      <img class="frame" src="assets/frames/tv_hisense_front.png" alt="Telewizor Hisense U8 — widok frontalny">
+    </div>
+    <div class="copy">
+      <h1>CTV</h1><div class="sub">ramka L-frame</div>
+      <p class="lead">Reklama w telewizorze podłączonym do internetu, bez przerywania programu. Obraz zmniejsza się do okna, a wokół niego pojawia się rama kampanii: Pazurowie, telewizor i projektory Hisense na złotych podestach, hasło ze zwrotem do 5000 PLN i kod QR prowadzący do promocji.</p>
+      <div class="pills"><span class="pill">Smart TV 1920×1080</span><span class="pill">Kod QR</span></div>
+    </div>
+  </section>
+
+  <!-- 5: Impact Max multiscreen -->
+  <section class="slide s-im" data-label="Impact Max">
+    <div class="glow"></div>
+    <img class="podium" src="assets/img/podium_top.webp" alt="">
+    <div class="dev laptop">
+      <div class="screen"><div class="dsk"><div class="chrome"><i></i><i></i><i></i><span>portal.pl/wiadomosci</span></div><div class="imaxw" aria-label="Hisense Impact Max multiscreen na stronie portalu">
+            <img class="ibg" src="assets/img/imax_bg.webp" alt="">
+            <div class="iorns"><div class="iorn" style="left:63.003%;top:0.864%;width:2.593%"><img src="assets/img/imax_o0.webp" alt="" style="animation-delay:0.00s,0.00s;animation-duration:3.2s,2.60s"></div><div class="iorn st" style="left:12.577%;top:2.859%;width:2.322%"><img src="assets/img/imax_o1.webp" alt="" style="animation-delay:3.23s,2.47s;animation-duration:3.5s,2.95s"></div><div class="iorn" style="left:75.0%;top:2.859%;width:3.715%"><img src="assets/img/imax_o2.webp" alt="" style="animation-delay:2.86s,1.94s;animation-duration:3.8s,3.30s"></div><div class="iorn st" style="left:96.672%;top:3.923%;width:2.322%"><img src="assets/img/imax_o3.webp" alt="" style="animation-delay:2.49s,1.41s;animation-duration:4.1s,3.65s"></div><div class="iorn" style="left:53.638%;top:4.189%;width:2.128%"><img src="assets/img/imax_o4.webp" alt="" style="animation-delay:2.12s,0.88s;animation-duration:4.4s,2.60s"></div><div class="iorn st" style="left:5.418%;top:4.521%;width:2.322%"><img src="assets/img/imax_o5.webp" alt="" style="animation-delay:1.75s,0.35s;animation-duration:3.2s,2.95s"></div><div class="iorn st" style="left:2.709%;top:11.37%;width:4.18%"><img src="assets/img/imax_o6.webp" alt="" style="animation-delay:1.38s,2.82s;animation-duration:3.5s,3.30s"></div><div class="iorn st" style="left:92.492%;top:13.364%;width:3.019%"><img src="assets/img/imax_o7.webp" alt="" style="animation-delay:1.01s,2.29s;animation-duration:3.8s,3.65s"></div><div class="iorn st" style="left:8.243%;top:18.949%;width:4.296%"><img src="assets/img/imax_o8.webp" alt="" style="animation-delay:0.64s,1.76s;animation-duration:4.1s,2.60s"></div><div class="iorn st" style="left:86.339%;top:19.415%;width:2.361%"><img src="assets/img/imax_o9.webp" alt="" style="animation-delay:0.27s,1.23s;animation-duration:4.4s,2.95s"></div><div class="iorn st" style="left:92.608%;top:23.87%;width:2.748%"><img src="assets/img/imax_o10.webp" alt="" style="animation-delay:3.50s,0.70s;animation-duration:3.2s,3.30s"></div><div class="iorn st" style="left:2.515%;top:25.332%;width:2.98%"><img src="assets/img/imax_o11.webp" alt="" style="animation-delay:3.13s,0.17s;animation-duration:3.5s,3.65s"></div><div class="iorn" style="left:17.337%;top:25.798%;width:2.322%"><img src="assets/img/imax_o12.webp" alt="" style="animation-delay:2.76s,2.64s;animation-duration:3.8s,2.60s"></div><div class="iorn" style="left:47.678%;top:26.396%;width:2.361%"><img src="assets/img/imax_o13.webp" alt="" style="animation-delay:2.39s,2.11s;animation-duration:4.1s,2.95s"></div><div class="iorn st" style="left:96.207%;top:38.098%;width:3.715%"><img src="assets/img/imax_o14.webp" alt="" style="animation-delay:2.02s,1.58s;animation-duration:4.4s,3.30s"></div></div>
+            <div class="iclip"><div class="ipodw"><img class="ipod" src="assets/img/imax_pod.webp" alt="">
+              <svg class="ifx" viewBox="557 46 732 485" preserveAspectRatio="none" aria-hidden="true"><defs>
+        <radialGradient id="lensG"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".25" stop-color="#fff1cf" stop-opacity=".9"/><stop offset=".55" stop-color="#ffc56a" stop-opacity=".45"/><stop offset="1" stop-color="#ff9a2e" stop-opacity="0"/></radialGradient>
+        <linearGradient id="coneG" gradientUnits="userSpaceOnUse" x1="72.7" y1="0" x2="192.7" y2="0"><stop offset="0" stop-color="#fff3d6" stop-opacity=".7"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></linearGradient>
+      
+        <linearGradient id="rayG" gradientUnits="userSpaceOnUse" x1="0" y1="405" x2="0" y2="312">
+          <stop offset="0" stop-color="#fff6e0" stop-opacity=".95"/><stop offset=".35" stop-color="#ffc768" stop-opacity=".5"/><stop offset="1" stop-color="#ff9d2e" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="slotG"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".4" stop-color="#ffe2a8" stop-opacity=".8"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+        <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+        <filter id="soft4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="soft3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.6"/></filter>
+      </defs>
+                <g transform="translate(669 314) scale(1.165) translate(-72.7 -371.7)">
+      
+      <polygon points="76.7,362.7 76.7,380.7 192.7,411.7 192.7,337.7" fill="url(#coneG)" filter="url(#soft4)" opacity=".7"/>
+      <circle class="halo" cx="72.7" cy="371.7" r="30" fill="url(#lensG)"/>
+      <g class="streak" fill="#fff8e6" filter="url(#soft)" opacity=".9"><ellipse cx="72.7" cy="371.7" rx="46" ry="1.4" transform="rotate(0 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="20" ry="1.0" transform="rotate(90 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="16" ry="0.8" transform="rotate(35 72.7 371.7)"/><ellipse cx="72.7" cy="371.7" rx="16" ry="0.8" transform="rotate(-35 72.7 371.7)"/></g>
+      <circle class="core2" cx="72.7" cy="371.7" r="5" fill="#fff" filter="url(#soft)"/>
+    </g>
+                <g transform="translate(830 364) scale(1.375) translate(-178 -404.5)">
+      
+      <g class="raysH" filter="url(#soft3)" fill="url(#rayG)"><polygon opacity="0.73" points="175.8,404.5 177.4,404.5 177.6,331.4 168.9,331.8"/><polygon opacity="0.89" points="182.4,404.5 184.0,404.5 190.8,350.7 184.8,350.2"/><polygon opacity="0.83" points="189.6,404.5 191.2,404.5 168.7,348.3 165.6,349.7"/><polygon opacity="0.79" points="183.4,404.5 185.0,404.5 147.5,317.7 139.4,321.6"/><polygon opacity="0.55" points="159.6,404.5 161.2,404.5 148.3,360.3 142.4,362.3"/><polygon opacity="0.91" points="174.8,404.5 176.4,404.5 166.8,358.7 161.2,360.2"/><polygon opacity="0.70" points="183.7,404.5 185.3,404.5 188.9,327.6 182.9,327.4"/><polygon opacity="0.84" points="190.8,404.5 192.4,404.5 175.7,310.9 166.7,312.8"/><polygon opacity="0.87" points="160.0,404.5 161.6,404.5 153.0,348.5 148.4,349.4"/><polygon opacity="0.92" points="195.5,404.5 197.1,404.5 190.5,317.3 185.2,317.8"/><polygon opacity="0.99" points="176.0,404.5 177.6,404.5 154.6,353.5 147.0,357.5"/><polygon opacity="0.60" points="188.3,404.5 189.9,404.5 187.7,355.8 180.9,356.4"/><polygon opacity="0.51" points="187.5,404.5 189.1,404.5 168.2,346.1 160.0,349.6"/><polygon opacity="0.55" points="189.1,404.5 190.7,404.5 179.1,355.6 176.1,356.4"/><polygon opacity="0.52" points="186.5,404.5 188.1,404.5 193.2,337.4 189.2,337.1"/><polygon opacity="0.60" points="165.7,404.5 167.3,404.5 176.3,354.6 170.9,353.8"/><polygon opacity="0.57" points="192.6,404.5 194.2,404.5 233.4,329.2 229.1,327.1"/></g>
+      <ellipse cx="178" cy="404.5" rx="34" ry="8" fill="url(#slotG)" filter="url(#soft4)" opacity=".85"/>
+      <ellipse class="core" cx="178" cy="404.5" rx="24" ry="3.2" fill="#fffaf0" filter="url(#soft)"/>
+      <circle class="halo h2" cx="178" cy="403" r="30" fill="url(#lensG)"/>
+      <g class="streak" fill="#fff8e6" filter="url(#soft)" opacity=".9"><ellipse cx="178" cy="403" rx="46" ry="1.4" transform="rotate(0 178 403)"/><ellipse cx="178" cy="403" rx="20" ry="1.0" transform="rotate(90 178 403)"/><ellipse cx="178" cy="403" rx="16" ry="0.8" transform="rotate(35 178 403)"/><ellipse cx="178" cy="403" rx="16" ry="0.8" transform="rotate(-35 178 403)"/></g>
+      <circle class="core2" cx="178" cy="403" r="5" fill="#fff" filter="url(#soft)"/>
+    </g></svg></div></div>
+            <img class="ilogo" src="assets/img/imax_logo.webp" alt="Hisense">
+            <img class="itxt" src="assets/img/imax_txt.webp" alt="Kup TV lub projektor Hisense i odbierz zwrot do 5000 PLN">
+          </div></div></div>
+      <img class="frame" src="assets/frames/laptop2_clean.png" alt="">
+    </div>
+    <div class="copy">
+      <h1>Impact Max</h1><div class="sub">multiscreen</div>
+      <p class="lead">Format, który otacza treść strony z trzech stron. Pazurowie stoją po bokach serwisu, a nad treścią są telewizor i projektory Hisense na złotych podestach oraz hasło ze zwrotem do 5000 PLN.</p>
+      <div class="pills"><span class="pill">Desktop</span><span class="pill">Tło strony + billboard</span></div>
+    </div>
+  </section>
+
+  <!-- 2: rich media 300x600 w telefonie -->
+  <section class="slide s-rm" data-label="Rich media">
+    <div class="glow"></div>
+    <img class="podium" src="assets/img/podium_top.webp" alt="">
+    <div class="dev phone">
+      <div class="screen">
+        <div class="scroller"><div class="page">
+          <div class="bar"><b>portal.pl</b><span><i></i><i></i><i></i></span></div>
+          <img class="pimg" src="assets/portal/placeholder.png" alt="">
+          <div class="plines"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="slot"><iframe data-src="formaty/rm300x600/index.html#nodata" title="Hisense rich media 300×600" scrolling="no" tabindex="-1"></iframe></div>
+          <img class="portal" alt="" src="assets/portal/portal_richmedia.png">
+        </div></div>
+        <div class="sb"><b>9:41</b><i>●●● ▮</i></div>
+        <div class="hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10.5"/><path d="M12 10a1.5 1.5 0 0 1 3 0v1.5"/><path d="M15 11a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-4.7-2.3L4 15.5a1.6 1.6 0 0 1 2.3-2.1L9 15"/></svg></div>
+      </div>
+      <img class="frame" src="assets/frames/telefon.png" alt="">
+    </div>
+    <div class="copy">
+      <h1>Rich media</h1><div class="sub">scroll 300×600</div>
+      <p class="lead">Half-page, który opowiada historię w rytmie przewijania. Najpierw Pazurowie i świąteczne hasło, potem telewizor i projektory Hisense wjeżdżają na złotych podestach, a licznik odlicza zwrot do 5000 PLN. Przewiń ekran telefonu.</p>
+      <div class="pills"><span class="pill">Half-page 300×600</span><span class="pill">Animacja ze scrollem</span></div>
+    </div>
+  </section>
+
+  <!-- 6: YouTube -->
+  <section class="slide s-yt" data-label="YouTube">
+    <div class="glow"></div>
+    <img class="podium" src="assets/img/podium_top.webp" alt="">
+    <div class="dev laptop">
+      <div class="screen">
+        <div class="ytpage">
+          <div class="ytplayer"><video class="ytv" src="assets/video/interstitial_720.mp4" muted loop playsinline preload="auto"></video><div class="ybar"><i></i></div></div>
+          <img class="ytover" src="assets/frames/yt_page.png" alt="">
+        </div>
+      </div>
+      <img class="frame" src="assets/frames/laptop2_clean.png" alt="">
+    </div>
+    <div class="copy">
+      <h1>YouTube</h1><div class="sub">wideo in-stream</div>
+      <p class="lead">Animacja z interstitiala jako 10-sekundowa reklama przed filmem w YouTube: Pazurowie, urządzenia Hisense na złotych podestach i hasło ze zwrotem do 5000 PLN. Kliknięcie prowadzi prosto do promocji.</p>
+      <div class="pills"><span class="pill">Wideo 16:9</span><span class="pill">10 s</span></div>
+    </div>
+  </section>
+
+  <!-- koniec -->
+  <section class="slide hero thanks" data-label="Koniec">
+    <div class="copy">
+      <img class="logo" src="assets/img/logo_hisense.svg" alt="Hisense">
+      <h1>Dziękujemy</h1>
+      <div class="pills"><span class="pill">My mamy już pomysł na kolorowe święta!</span></div>
+    </div>
+    <img class="para" src="assets/img/para.webp" alt="Edyta i Cezary Pazurowie">
+    <div class="orn rm" style="left:1375px;top:79px;width:80px;animation-delay:.5s"><img src="assets/img/orn_koniczyna.webp" alt=""></div>
+    <div class="orn rm" style="left:1474px;top:216px;width:53px;animation-delay:.65s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-1.4s,-.4s"></div>
+    <div class="orn rm" style="left:1406px;top:586px;width:60px;animation-delay:.8s"><img src="assets/img/orn_romb.webp" alt="" style="animation-delay:-2.1s,-1.9s"></div>
+    <div class="orn rm" style="left:98px;top:90px;width:85px;animation-delay:.55s"><img src="assets/img/orn_koniczyna.webp" alt="" style="animation-delay:-.7s,-1.1s"></div>
+    <div class="orn rm" style="left:58px;top:496px;width:53px;animation-delay:.7s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-2.6s,-2.3s"></div>
+    <div class="orn rm" style="left:196px;top:636px;width:58px;animation-delay:.9s"><img src="assets/img/orn_romb.webp" alt="" style="animation-delay:-1.1s,-.9s"></div>
+    <div class="orn rm" style="left:793px;top:115px;width:46px;animation-delay:.75s"><img src="assets/img/orn_blysk.webp" alt="" style="animation-delay:-3s,-1.5s"></div>
+    <div class="orn rm kul" style="left:788px;top:616px;width:29px;animation-delay:.95s"><img src="assets/img/kulka.webp" alt="" style="animation-delay:-1.8s,-.6s"></div>
+  </section>
+
+  <button class="arrow prev" id="prev" type="button" aria-label="Poprzedni slajd"><i></i></button>
+  <button class="arrow next" id="next" type="button" aria-label="Następny slajd"><i></i></button>
+
+  <nav class="band">
+    <div class="ddx"><svg viewBox="0 0 90 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="DDX" role="img">
+      <path d="M13.4763 7.04297C17.6917 7.04297 20.9642 8.31328 23.2972 10.8557C25.6285 13.3981 26.7942 16.8221 26.7942 21.1295C26.7942 25.4369 25.5885 28.9829 23.1789 31.444C20.7676 33.9051 17.5334 35.1366 13.4763 35.1366H0V7.04297H13.4763ZM6.91558 13.0624V29.1154H12.6464C14.8855 29.1154 16.5974 28.3928 17.7839 26.9475C18.9687 25.5023 19.562 23.55 19.562 21.0889C19.562 18.6278 18.9496 16.5748 17.7248 15.1702C16.5 13.7656 14.8072 13.0624 12.6464 13.0624H6.91558Z" fill="white"/>
+      <path d="M45.2731 7.04297C49.4886 7.04297 52.7611 8.31328 55.0941 10.8557C57.4254 13.3981 58.5911 16.8221 58.5911 21.1295C58.5911 25.4369 57.3854 28.9829 54.9758 31.444C52.5645 33.9051 49.3303 35.1366 45.2731 35.1366H31.7969V7.04297H45.2731ZM38.7125 13.0624V29.1154H44.4433C46.6823 29.1154 48.3943 28.3928 49.5808 26.9475C50.7656 25.5023 51.3588 23.55 51.3588 21.0889C51.3588 18.6278 50.7464 16.5748 49.5216 15.1702C48.2968 13.7656 46.604 13.0624 44.4433 13.0624H38.7125Z" fill="white"/>
+      <path d="M89.7852 35.1348H81.0116L74.3726 26.2267L67.6153 35.1348H59L69.8805 20.3945L59.2766 7.04297H68.1286" fill="white"/>
+      <path d="M82.5275 8.43594H90.0015L84.3647 -0.134718H76.8906L82.5275 8.43594Z" fill="#D8AE6D"/>
+      <path d="M84.3629 17.0062H76.8906L82.5275 8.43555H90.0015L84.3629 17.0062Z" fill="white"/>
+    </svg></div>
+    <div class="dashes" id="dashes"><button class="fs" id="fs" type="button" aria-label="Pełny ekran" title="Pełny ekran (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="off" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button></div>
+    <img class="hs" src="assets/img/logo_hisense.svg" alt="Hisense">
+  </nav>
+</main>
+
+<script src="assets/js/lenis.min.js"></script>
+<script>
+(function () {
+  var art = document.getElementById('art');
+  function scale() {
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    art.style.setProperty('--s', s);
+    art.style.width = Math.max(1600, window.innerWidth / s) + 'px';   // plansza na całą szerokość okna
+  }
+  window.addEventListener('resize', scale); scale();
+
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var dashes = document.getElementById('dashes'), cur = 0, ready = false;
+  slides.forEach(function (s, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'dash';
+    b.innerHTML = '<span>' + s.dataset.label + '</span>'; b.setAttribute('aria-label', s.dataset.label);
+    b.onclick = function () { go(i); }; dashes.insertBefore(b, document.getElementById('fs'));
+  });
+
+  /* ---------- rich media: portal przewijany w telefonie ---------- */
+  var rmSlide = document.querySelector('.s-rm'), sc = rmSlide.querySelector('.scroller'), slot = rmSlide.querySelector('.slot'),
+      rmFrame = slot.querySelector('iframe'), portal = rmSlide.querySelector('img.portal'), hint = rmSlide.querySelector('.hint');
+  // przezroczysty prostokąt na baner w grafice portalu: 551×3058, x 43–510, y 952–1890
+  function layoutSlot() {
+    var k = portal.clientWidth / 551; if (!k) return;
+    slot.style.top = (portal.offsetTop + 952 * k) + 'px';
+    slot.style.height = (939 * k) + 'px';
+    rmFrame.style.transform = 'scale(' + (slot.clientWidth / 300) + ')';
+  }
+  // kreacja sama liczy postęp z położenia na ekranie (postMessage "hisense-geom")
+  function postGeom() {
+    if (!rmFrame.contentWindow) return;
+    var a = slot.getBoundingClientRect(), b = sc.getBoundingClientRect(); if (!b.height) return;
+    try { rmFrame.contentWindow.postMessage({ type:'hisense-geom', top:a.top - b.top, height:a.height, vh:b.height }, '*'); } catch (e) {}
+  }
+  rmFrame.addEventListener('load', function () { layoutSlot(); postGeom(); setTimeout(postGeom, 300); });
+  sc.addEventListener('scroll', function () { postGeom(); if (sc.scrollTop > 20) hint.classList.add('used'); }, { passive:true });
+  window.addEventListener('resize', function () { layoutSlot(); postGeom(); });
+  portal.addEventListener('load', layoutSlot);
+
+  var lenis = null;
+  if (window.Lenis) {
+    lenis = new Lenis({ wrapper:sc, content:sc.firstElementChild, smoothWheel:true, lerp:0.07, wheelMultiplier:1.1 });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+  }
+  var drag = null;
+  function curScroll() { return lenis ? lenis.targetScroll : sc.scrollTop; }
+  sc.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse') return; e.preventDefault();
+    drag = { y:e.clientY, s:curScroll(), v:0, t:0, ly:curScroll() }; sc.setPointerCapture(e.pointerId); sc.style.cursor = 'grabbing';
+  });
+  sc.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var s = parseFloat(getComputedStyle(art).getPropertyValue('--s')) || 1;
+    var y = drag.s - (e.clientY - drag.y) / s, now = performance.now();
+    if (drag.t) { var v = (y - drag.ly) / Math.max(1, now - drag.t); drag.v = drag.v * .6 + v * .4; }
+    drag.ly = y; drag.t = now;
+    if (lenis) lenis.scrollTo(y, { lerp:.25 }); else sc.scrollTop = y;
+  });
+  function endDrag() {
+    if (drag && lenis && drag.t && performance.now() - drag.t < 80 && Math.abs(drag.v) > .05) lenis.scrollTo(drag.ly + drag.v * 420, { lerp:.045 });
+    drag = null; sc.style.cursor = '';
+  }
+  sc.addEventListener('pointerup', endDrag); sc.addEventListener('pointercancel', endDrag);
+
+  function resetRM() {
+    if (lenis) lenis.scrollTo(0, { immediate:true, force:true }); sc.scrollTop = 0; hint.classList.remove('used');
+    rmFrame.src = 'about:blank';
+    setTimeout(function () { rmFrame.src = rmFrame.dataset.src; layoutSlot(); }, 60);
+  }
+
+  /* ---------- interstitial w laptopie ---------- */
+  var isSlide = document.querySelector('.s-is'), ist = isSlide.querySelector('.ist'), isFrame = ist.querySelector('iframe'), isTimer, isStart;
+  function fitIS() {
+    var area = isFrame.parentElement, w = area.clientWidth, h = area.clientHeight; if (!w || !h) return;
+    var fw = Math.max(w, h * 16 / 9), fh = fw * 9 / 16;   // 16:9 wypełnia całe pole, nadmiar przycięty na środku
+    isFrame.style.width = fw + 'px'; isFrame.style.height = fh + 'px';
+    isFrame.style.left = ((w - fw) / 2) + 'px'; isFrame.style.top = ((h - fh) / 2) + 'px';
+  }
+  window.addEventListener('resize', fitIS);
+  function resetIS() {
+    clearInterval(isTimer); clearTimeout(isStart);
+    ist.hidden = false; fitIS();
+    isFrame.style.visibility = 'hidden'; isFrame.src = 'about:blank';
+    isStart = setTimeout(function () {   // start po wjeździe laptopa na podest
+      isFrame.onload = function () { isFrame.style.visibility = 'visible'; isFrame.onload = null; };
+      isFrame.src = isFrame.dataset.src;
+    }, 650);
+    var left = 7, label = ist.querySelector('.skip'), x = ist.querySelector('.x');
+    x.disabled = true; label.textContent = 'Możesz zamknąć reklamę za 7 s';
+    x.onclick = function (e) { e.stopPropagation(); ist.hidden = true; clearInterval(isTimer); };
+    isTimer = setInterval(function () {
+      left--; label.textContent = left > 0 ? 'Możesz zamknąć reklamę za ' + left + ' s' : 'Przejdź do portal.pl';
+      if (left <= 0) { x.disabled = false; clearInterval(isTimer); }
+    }, 1000);
+  }
+
+  /* ---------- tekst pojawia się litera po literze ---------- */
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function typeSlide(s) {
+    var els = [].slice.call(s.querySelectorAll('h1, .sub, .lead')), t = .2;
+    els.forEach(function (el, i) {
+      if (!el.dataset.full) el.dataset.full = el.textContent;
+      var full = el.dataset.full; el.textContent = '';
+      if (reduce || el.classList.contains('sub')) { el.textContent = full; if (el.classList.contains('sub')) { var d = t; el.style.opacity = 0; el.style.transition = 'none'; requestAnimationFrame(function () { requestAnimationFrame(function () { el.style.transition = 'opacity .5s ease ' + d.toFixed(2) + 's'; el.style.opacity = 1; }); }); t += .2; } return; }
+      var step = i === 0 ? .03 : .006, frag = document.createDocumentFragment();
+      full.split('').forEach(function (c) {
+        if (/\s/.test(c)) { frag.appendChild(document.createTextNode(c)); return; }
+        var sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = c; sp.style.animationDelay = t.toFixed(3) + 's'; t += step; frag.appendChild(sp);
+      });
+      el.appendChild(frag); t += .12;
+    });
+    // logotypy w etykietach pojawiają się po kolei zaraz po wpisaniu tekstu
+    [].forEach.call(s.querySelectorAll('.pill.lg'), function (p, i) {
+      p.style.animation = 'none'; void p.offsetWidth;
+      p.style.animation = 'pillIn .5s cubic-bezier(.2,.8,.2,1) ' + (t + i * .09).toFixed(2) + 's both';
+    });
+  }
+
+  var prev = document.getElementById('prev'), next = document.getElementById('next');
+  function go(n) {
+    if (!ready) return;
+    cur = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
+    clearInterval(isTimer); clearTimeout(isStart);
+    if (slides[cur] === rmSlide) resetRM(); else rmFrame.src = 'about:blank';
+    if (slides[cur] === isSlide) resetIS(); else isFrame.src = 'about:blank';
+    var pv = document.querySelector('.progv');
+    if (slides[cur].classList.contains('s-ctv')) { try { pv.currentTime = 0; } catch (e) {} var pp = pv.play(); if (pp && pp.catch) pp.catch(function () {}); } else pv.pause();
+    var iw = document.querySelector('.imaxw'); clearTimeout(window.__imT); iw.classList.remove('play');
+    if (slides[cur].classList.contains('s-im')) { void iw.offsetWidth; window.__imT = setTimeout(function () { iw.classList.add('play'); }, 900); }
+    var yv = document.querySelector('.ytv');
+    if (slides[cur].classList.contains('s-yt')) { try { yv.currentTime = 0; } catch (e) {} var yp = yv.play(); if (yp && yp.catch) yp.catch(function () {}); } else yv.pause();
+    var cw = document.querySelector('.ctvw'); clearTimeout(window.__ctvT); cw.classList.remove('go');
+    if (slides[cur].classList.contains('s-ctv')) { void cw.offsetWidth; window.__ctvT = setTimeout(function () { cw.classList.add('go'); }, 1600); }
+    prev.hidden = cur === 0; next.hidden = cur === slides.length - 1;
+    [].forEach.call(dashes.querySelectorAll('.dash'), function (b, i) { b.classList.toggle('on', i === cur); });
+    typeSlide(slides[cur]);
+    try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {}
+  }
+  window.addEventListener('hashchange', function () { var n = parseInt(location.hash.slice(1), 10); if (n > 0 && n - 1 !== cur) go(n - 1); });
+  (function () { var v = document.querySelector('.ytv'), bar = document.querySelector('.ybar i');
+    function upd() { if (v.duration) bar.style.width = (v.currentTime / v.duration * 100) + '%'; if (!v.paused) requestAnimationFrame(upd); }
+    v.addEventListener('play', function () { requestAnimationFrame(upd); }); })();
+  prev.onclick = function () { go(cur - 1); };
+  next.onclick = function () { go(cur + 1); };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) toggleFs();
+  });
+
+  /* pełny ekran */
+  var fs = document.getElementById('fs'), d = document;
+  function isFs() { return !!(d.fullscreenElement || d.webkitFullscreenElement); }
+  function toggleFs() { if (isFs()) (d.exitFullscreen || d.webkitExitFullscreen).call(d); else { var r = d.documentElement.requestFullscreen || d.documentElement.webkitRequestFullscreen; if (r) r.call(d.documentElement); } }
+  fs.onclick = function (e) { e.stopPropagation(); toggleFs(); };
+  function syncFs() { fs.classList.toggle('on', isFs()); }
+  d.addEventListener('fullscreenchange', syncFs); d.addEventListener('webkitfullscreenchange', syncFs);
+
+  /* ---------- wstępne ładowanie ---------- */
+  var list = ['assets/frames/yt_page.png','assets/img/ctv_grafika.webp','assets/img/imax_bg.webp','assets/img/imax_pod.webp','assets/img/imax_logo.webp','assets/img/imax_txt.webp','assets/frames/tv_hisense_front.png','assets/portal/placeholder.png','assets/img/para.webp','assets/img/podium_top.webp','assets/img/s5.webp','assets/img/s4a.webp','assets/img/s4b.webp','assets/img/s4c.webp','assets/img/kulka.webp','assets/img/logo_hisense.svg','assets/frames/telefon.png','assets/frames/laptop2_clean.png','assets/portal/portal.png','assets/portal/portal_richmedia.png'];
+  var done = 0, fill = document.getElementById('fill'), t0 = performance.now();
+  function tick() { done++; fill.style.width = Math.round(done / (list.length + 1) * 100) + '%'; }
+  var jobs = list.map(function (src) { return new Promise(function (res) { var im = new Image(); im.onload = im.onerror = function () { tick(); res(); }; im.src = src; }); });
+  jobs.push((document.fonts ? Promise.all([document.fonts.load('500 50px Poppins'), document.fonts.load('400 21px Poppins')]).catch(function () {}) : Promise.resolve()).then(tick));
+  Promise.all(jobs).then(function () {
+    setTimeout(function () {
+      ready = true; document.documentElement.classList.remove('loading'); document.getElementById('loader').hidden = true;
+      var start = parseInt((location.hash || '').slice(1), 10);
+      go(start > 0 ? start - 1 : 0);
+    }, Math.max(0, 900 - (performance.now() - t0)));
+  });
+})();
+</script>
+</body>
+</html>
