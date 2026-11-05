@@ -42,6 +42,8 @@
   .dashes .dash::after { content:""; position:absolute; left:0; right:0; top:28px; height:2px; border-radius:1px; background:var(--gold); opacity:.42; transition:opacity .3s; }
   .dashes .dash span { position:absolute; left:0; right:0; top:6px; text-align:center; opacity:0; transform:translateY(4px); transition:opacity .3s, transform .3s; white-space:nowrap; }
   .dashes .dash:hover span, .dashes .dash.on span { opacity:.95; transform:none; }
+  .dashes:hover .dash span { opacity:0; transform:translateY(4px); }
+  .dashes:hover .dash:hover span { opacity:.95; transform:none; }
   .dashes .dash.on::after { opacity:1; background:linear-gradient(90deg, var(--gold), var(--gold2), var(--gold)); }
   .dashes .dash:hover::after { opacity:.8; }
   .fs { position:relative; margin-left:14px; top:5px; width:36px; height:36px; flex:none; display:flex; align-items:center; justify-content:center; background:none; border:1px solid var(--gold); color:var(--gold2); cursor:pointer; transition:background .2s; }
@@ -239,7 +241,7 @@
   .s-im .drag.grabbing { cursor:grabbing; }
   /* nad laptopem: dwie wersje billboardu */
   .s-im .opts { position:absolute; left:120px; top:136px; width:800px; z-index:8; display:flex; justify-content:center; gap:26px; }
-  .s-im .opts button { background:none; border:0; padding:0 0 5px; cursor:pointer; color:rgba(255,255,255,.55); font:500 12px/1 var(--sans); letter-spacing:.18em; text-transform:uppercase; border-bottom:1px solid transparent; }
+  .s-im .opts button { background:none; border:0; padding:0 0 5px; cursor:pointer; color:rgba(255,255,255,.55); font:500 16.8px/1 var(--sans); letter-spacing:.18em; text-transform:uppercase; border-bottom:1px solid transparent; }
   .s-im .opts button.on { color:var(--gold2); border-bottom-color:var(--gold); }
   .s-im .opts button:hover { color:#fff; }
   .s-im .veil { position:absolute; inset:0; z-index:6; background:#fff; opacity:0; pointer-events:none; transition:opacity .45s ease; }
