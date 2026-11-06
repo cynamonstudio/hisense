@@ -146,13 +146,13 @@
   .s-aw .tx em { display:block; margin-top:3px; font-style:normal; font-weight:400; font-size:15px; line-height:1.3; }
   .s-aw .card .tx em { color:rgba(6,79,70,.72); }
   .s-aw .pubs, .s-aw .chips, .s-aw .brands { margin-top:auto; padding-top:14px; }
-  .s-aw .pubs { display:block; overflow:hidden; min-width:0; background:#043e36; border-radius:4px; padding:12px 0; }
+  .s-aw .pubs { display:flex; align-items:center; overflow:hidden; min-width:0; height:79px; background:#043e36; border-radius:4px; padding:0; }
   .s-aw .pubs img { height:38px; width:auto; display:block; flex:none; }
   .s-aw .chips { display:flex; gap:10px; }
   .s-aw .chip { flex:1; min-width:0; border:1px solid transparent; border-radius:4px; padding:10px 6px 8px; text-align:center; font-size:13px; line-height:1.2; font-weight:500; color:#fff; background:#043e36; }
   .s-aw .chip svg { width:22px; height:22px; display:block; margin:0 auto 6px; color:var(--gold2); }
   .s-aw .chip span { white-space:nowrap; }
-  .s-aw .brands { display:block; overflow:hidden; min-width:0; background:#043e36; border-radius:4px; padding:12px 0; }
+  .s-aw .brands { display:flex; align-items:center; overflow:hidden; min-width:0; height:64px; background:#043e36; border-radius:4px; padding:0; }
   .s-aw .brands img { height:38px; width:auto; display:block; flex:none; }
   .s-aw .marq { display:flex; overflow:hidden; width:100%; min-width:0; -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent); mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent); }
   .s-aw .track { display:flex; align-items:center; flex:none; gap:22px; padding-right:22px; animation:logoMarq 16s linear infinite; }
@@ -164,9 +164,10 @@
   .s-aw .stat { flex:1; min-height:0; display:flex; align-items:center; gap:14px; padding:12px 16px; border-radius:4px; background:#043e36; }
   .s-aw .stat b { display:block; font-weight:500; font-size:30px; letter-spacing:-.02em; line-height:1; color:#fff; }
   .s-aw .stat em { display:block; margin-top:4px; font-style:normal; font-weight:400; font-size:14px; line-height:1.25; color:rgba(225,236,233,.78); }
-  .s-aw .ln, .s-aw .card, .s-aw .panel, .s-aw .tx, .s-aw .stat { opacity:0; }
+  .s-aw .belt { margin-top:16px; border-radius:4px; padding:16px 24px; text-align:center; font-weight:500; font-size:20px; letter-spacing:-.01em; color:#064f46; background:linear-gradient(180deg,#f1d696 0%,#e2b96c 42%,#c79a52 100%); }
+  .s-aw .ln, .s-aw .card, .s-aw .panel, .s-aw .tx, .s-aw .stat, .s-aw .belt { opacity:0; }
   .s-aw.active .ln, .s-aw.active .tx { animation:imTx .4s ease both; }
-  .s-aw.active .card, .s-aw.active .panel, .s-aw.active .stat { animation:imFrame .42s cubic-bezier(.2,.8,.2,1) both; }
+  .s-aw.active .card, .s-aw.active .panel, .s-aw.active .stat, .s-aw.active .belt { animation:imFrame .42s cubic-bezier(.2,.8,.2,1) both; }
 
   /* urządzenia na złotych podestach */
   .podium { position:absolute; z-index:2; display:block; filter:drop-shadow(0 30px 40px rgba(0,30,26,.3)); }
@@ -326,7 +327,7 @@
   .ist .area { position:relative; flex:1; min-height:0; overflow:hidden; }
   .ist iframe { position:absolute; border:0; display:block; background:#022b25; }
 
-  @media (prefers-reduced-motion:reduce) { .orn img, .hint, .s-imp .ln, .s-imp .card, .s-imp .panel, .s-imp .tx, .s-imp .note, .s-aw .ln, .s-aw .card, .s-aw .panel, .s-aw .tx, .s-aw .stat, .s-aw .track { animation:none !important; opacity:1 !important; transform:none !important; } .s-imp .mark::before, .s-aw .mark::before { animation:none !important; opacity:0 !important; } }
+  @media (prefers-reduced-motion:reduce) { .orn img, .hint, .s-imp .ln, .s-imp .card, .s-imp .panel, .s-imp .tx, .s-imp .note, .s-aw .ln, .s-aw .card, .s-aw .panel, .s-aw .tx, .s-aw .stat, .s-aw .track, .s-aw .belt { animation:none !important; opacity:1 !important; transform:none !important; } .s-imp .mark::before, .s-aw .mark::before { animation:none !important; opacity:0 !important; } }
 </style>
 </head>
 <body>
@@ -397,11 +398,12 @@ na kolorowe święta!</h1>
         </div>
         <div class="panel" style="animation-delay:2.3s">
           <h3 class="tx" style="animation-delay:2.52s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 19V10M12 19V5M19 19v-7"/></svg>Potencjał kampanii</h3>
-          <div class="stat" style="animation-delay:2.78s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2.5 12S6.5 6 12 6s9.5 6 9.5 6-4 6-9.5 6S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.4"/></svg></span><div class="tx" style="animation-delay:2.98s"><b>40,13 mln</b><em>odsłon</em></div></div>
-          <div class="stat" style="animation-delay:3.18s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="2.4"/><circle cx="16" cy="9" r="1.8"/><path d="M4.5 18.5c.6-2.4 2.4-3.6 4.5-3.6s3.9 1.2 4.5 3.6M14 14.9c1.3-.5 2.6-.4 3.8.6 1 .9 1.6 2 1.8 3"/></svg></span><div class="tx" style="animation-delay:3.38s"><b>10,43 mln</b><em>zasięgu (wariant ostrożny)</em></div></div>
-          <div class="stat" style="animation-delay:3.58s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2"/></svg></span><div class="tx" style="animation-delay:3.78s"><b>44%</b><em>internautów 25–54</em></div></div>
+          <div class="stat" style="animation-delay:2.78s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2.5 12S6.5 6 12 6s9.5 6 9.5 6-4 6-9.5 6S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.4"/></svg></span><div class="tx" style="animation-delay:2.98s"><b>43,44 mln</b><em>odsłon</em></div></div>
+          <div class="stat" style="animation-delay:3.18s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="2.4"/><circle cx="16" cy="9" r="1.8"/><path d="M4.5 18.5c.6-2.4 2.4-3.6 4.5-3.6s3.9 1.2 4.5 3.6M14 14.9c1.3-.5 2.6-.4 3.8.6 1 .9 1.6 2 1.8 3"/></svg></span><div class="tx" style="animation-delay:3.38s"><b>11,20 mln</b><em>zasięgu UU po deduplikacji</em></div></div>
+          <div class="stat" style="animation-delay:3.58s"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2"/></svg></span><div class="tx" style="animation-delay:3.78s"><b>47%</b><em>internautów 25–54</em></div></div>
         </div>
       </div>
+      <div class="belt" style="animation-delay:4s">Meta Partnership Ads (whitelisting), Boosting, Skalowanie</div>
     </div>
   </section>
 
